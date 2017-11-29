@@ -5,9 +5,6 @@ import java.util.regex.Pattern;
 
 public class StringUtils {
 	
-	
-	public static final char UNDERLINE = '_';
-	
 	/**
 	 * 首字符转大写
 	 * 
@@ -21,9 +18,14 @@ public class StringUtils {
 		return val;
 	}
 
-	
-
-	public static String camelToUnderline(String param) {
+	/**
+	 * 下划线转驼峰
+	 * @param param 要转换的字符串
+	 * @param underline 下划线字符串
+	 * @return
+	 * @autohr shuzheng_wang  2017-11-29 14:10
+	 */
+	public static String camelToUnderline(String param, String underline) {
 		if (param == null || "".equals(param.trim())) {
 			return "";
 		}
@@ -32,7 +34,7 @@ public class StringUtils {
 		for (int i = 0; i < len; i++) {
 			char c = param.charAt(i);
 			if (Character.isUpperCase(c)) {
-				sb.append(UNDERLINE);
+				sb.append(underline);
 				sb.append(Character.toLowerCase(c));
 			} else {
 				sb.append(c);
@@ -41,7 +43,14 @@ public class StringUtils {
 		return sb.toString();
 	}
 
-	public static String underLineToCamel(String param) {
+	/**
+	 * 将aaXbbXcc（X可为任何字符）的下划线字符串转换为驼峰字符串aaBbCc
+	 * @param param 要转换的字符串
+	 * @param underline X
+	 * @return
+	 * @autohr shuzheng_wang  2017-11-29 14:11
+	 */
+	public static String underLineToCamel(String param,char underline) {
 		if (param == null || "".equals(param.trim())) {
 			return "";
 		}
@@ -49,7 +58,7 @@ public class StringUtils {
 		StringBuilder sb = new StringBuilder(len);
 		for (int i = 0; i < len; i++) {
 			char c = param.charAt(i);
-			if (c == UNDERLINE) {
+			if (c == underline) {
 				if (++i < len) {
 					sb.append(Character.toUpperCase(param.charAt(i)));
 				}
@@ -60,7 +69,13 @@ public class StringUtils {
 		return sb.toString();
 	}
 
-	public static String underLineToCamel2(String param) {
+	/**
+	 * 将aa_bb_cc的下划线字符串转换为驼峰字符串aaBbCc
+	 * @param param
+	 * @return
+	 * @autohr shuzheng_wang  2017-11-29 14:07
+	 */
+	public static String underLineToCamel(String param) {
 		if (param == null || "".equals(param.trim())) {
 			return "";
 		}
@@ -73,9 +88,6 @@ public class StringUtils {
 			sb.replace(position - 1, position + 1, sb.substring(position, position + 1).toUpperCase());
 		}
 		return sb.toString();
-	}
-
-	public static void main(String[] args) {
 	}
 
 }

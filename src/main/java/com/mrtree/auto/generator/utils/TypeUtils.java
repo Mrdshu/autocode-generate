@@ -1,6 +1,6 @@
 package com.mrtree.auto.generator.utils;
 
-import com.mrtree.auto.generator.core.CommonDataType;
+import com.mrtree.auto.generator.constant.CommonDataType;
 
 public class TypeUtils {
 

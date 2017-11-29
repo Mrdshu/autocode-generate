@@ -1,4 +1,4 @@
-package com.mrtree.auto.generator;
+package com.mrtree.auto.generator.main;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,32 +14,31 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 
-import com.mrtree.auto.generator.core.Configure;
-import com.mrtree.auto.generator.core.DataProcessor;
+import com.mrtree.auto.generator.core.MvcGenerateConfig;
+import com.mrtree.auto.generator.core.TableDataProcessor;
 import com.mrtree.auto.generator.model.Table;
 import com.mrtree.auto.generator.utils.BeanUtils;
 
 @SuppressWarnings({"rawtypes", "unchecked" })
 public class Generator {
 
-	protected Configure config;
-	private static final String MODELVM = "supercarBeanTemplate.vm";
-	private static final String MAPPERVM = "supercarMapperTemplate.vm";
-	private static final String DAOVM = "supercarDaoTemplate.vm";
-	private static final String SERVICEVM = "supercarServiceTemplate.vm";
-	private static final String CONTROLLERVM = "supercarControllerTemplate.vm";
+	protected MvcGenerateConfig config;
+	
 	
 	public Generator() {
-		config = new Configure();
+		config = new MvcGenerateConfig();
 	}
 
-	public Generator(Configure config) {
+	public Generator(MvcGenerateConfig config) {
 		this.config = config;
 	}
-
-	public void generate(Table table) {
+	/**
+	 * 根据表信息生成模板
+	 * @param table
+	 * @autohr shuzheng_wang  2017-11-29 17:20
+	 */
+	public void generateForTable(Table table) {
 		generateModel(table);
-//		generateExample(table);
 		generateMapper(table);
 		generateDao(table);
 		generateService(table);
@@ -64,17 +63,16 @@ public class Generator {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		// StringWriter writer=new StringWriter();
 		return writer;
 	}
 
 	private VelocityEngine createVelocityEngine() {
 		Properties props = new Properties();
-		props.setProperty("resource.loader", "class");
-		props.setProperty("class.resource.loader.class",
-				"org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-		// properties.setProperty("input.encoding", "UTF-8");
-		// properties.setProperty("output.encoding", "UTF-8");
+		
+		//定义为类路径加载
+		props.setProperty(Velocity.RESOURCE_LOADER, "class");
+		props.setProperty("class.resource.loader.class","org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+		//定义编解码，以及读取输出格式
 		props.setProperty(Velocity.ENCODING_DEFAULT, "UTF-8");
 		props.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
 		props.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
@@ -87,7 +85,7 @@ public class Generator {
 		VelocityContext context = createContext(table);
 		Writer writer = createWriter(config.getModelPackage().replace(".", "/")
 				+ "/" + table.getBeanName() + ".java");
-		velocityEngine.mergeTemplate(config.templeteBase + MODELVM, "UTF-8", context, writer);
+		velocityEngine.mergeTemplate(config.templeteBase + config.getModelVM(), "UTF-8", context, writer);
 		flushWriter(writer);
 	}
 
@@ -99,17 +97,6 @@ public class Generator {
 		}
 	}
 
-//	public void generateExample(Table table) {
-//		VelocityEngine velocityEngine = createVelocityEngine();
-//		VelocityContext context = createContext(table);
-//		Writer writer = createWriter(config.getExamplePackage().replace(".",
-//				"/")
-//				+ "/" + table.getBeanName() + "Example.java");
-//		velocityEngine.mergeTemplate(
-//				config.templeteBase + "exampleTemplate.vm", context, writer);
-//		flushWriter(writer);
-//	}
-
 	public void generateMapper(Table table) {
 		VelocityEngine velocityEngine = createVelocityEngine();
 
@@ -117,8 +104,8 @@ public class Generator {
 
 		Writer writer = createWriter(config.getMapperPackage()
 				.replace(".", "/") + "/" + table.getBeanName() + "Mapper.xml");
-		//velocityEngine.mergeTemplate(config.templeteBase + MAPPERVM, context, writer);
-		velocityEngine.mergeTemplate(config.templeteBase + MAPPERVM, "UTF-8", context, writer);
+
+		velocityEngine.mergeTemplate(config.templeteBase + config.getMapperVM(), "UTF-8", context, writer);
 		flushWriter(writer);
 
 	}
@@ -128,7 +115,7 @@ public class Generator {
 		VelocityContext context = createContext(table);
 		Writer writer = createWriter(config.getDaoPackage()
 				.replace(".", "/") + "/" + table.getBeanName() + "Dao.java");
-		velocityEngine.mergeTemplate(config.templeteBase + DAOVM, "UTF-8",context, writer);
+		velocityEngine.mergeTemplate(config.templeteBase + config.getDaoVM(), "UTF-8",context, writer);
 		flushWriter(writer);
 	}
 	
@@ -137,7 +124,7 @@ public class Generator {
 		VelocityContext context = createContext(table);
 		Writer writer = createWriter(config.getServicePackage()
 				.replace(".", "/") + "/" + table.getBeanName() + "Service.java");
-		velocityEngine.mergeTemplate(config.templeteBase + SERVICEVM,"UTF-8", context, writer);
+		velocityEngine.mergeTemplate(config.templeteBase + config.getServiceVM(),"UTF-8", context, writer);
 		flushWriter(writer);
 	}
 	
@@ -146,7 +133,7 @@ public class Generator {
 		VelocityContext context = createContext(table);
 		Writer writer = createWriter(config.getControllerPackage()
 				.replace(".", "/") + "/" + table.getBeanName() + "Controller.java");
-		velocityEngine.mergeTemplate(config.templeteBase + CONTROLLERVM, "UTF-8",context, writer);
+		velocityEngine.mergeTemplate(config.templeteBase + config.getControllerVM(), "UTF-8",context, writer);
 		flushWriter(writer);
 	}
 
@@ -163,29 +150,17 @@ public class Generator {
 	}
 
 	public static void main(String[] args) {
-		Configure config = new Configure();
-//		config.setTargetDir("d:/test/");
-//		config.setTargetResourceDir("d:/test/resources/");
-		
-		config.setTargetDir("E:/workspace/GIT/supercar/src/main/java/");
-		config.setTargetResourceDir("E:/workspace/GIT/supercar/src/main/resources/");
-		config.setModelPackage("com.xw.supercar.entity");
-//		config.setExamplePackage("com.wsz.example");
-		config.setMapperPackage("mapper");
-		config.setDaoPackage("com.xw.supercar.dao");
-		config.setServicePackage("com.xw.supercar.service");
-		config.setControllerPackage("com.xw.supercar.controller");
-		config.setPrimaryKey("id");
+		MvcGenerateConfig config = new MvcGenerateConfig();
 		Generator generator = new Generator(config);
+		
+		String tableNamePattern = config.getTableNamePattern();
 
-		String tableNamePattern = "tb_repair_%";
-		DataProcessor t = new DataProcessor();
-
+		TableDataProcessor t = new TableDataProcessor();
 		List<Table> tableInfos = t.getTableInfos(tableNamePattern);
 
 		try {
 			for (Table table : tableInfos) {
-				generator.generate(table);
+				generator.generateForTable(table);
 			}
 			
 		} catch (Exception e) {

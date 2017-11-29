@@ -1,4 +1,4 @@
-package com.mrtree.auto.generator.core;
+package com.mrtree.auto.generator.constant;
 
 import java.lang.reflect.Field;
 

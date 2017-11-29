@@ -1,78 +1,33 @@
 package com.mrtree.auto.generator.model;
 
+import lombok.Data;
+
+/**
+ * <p>
+ *   数据库表的列信息
+ * </p>
+ * @author shuzheng_wang  2017-11-29 11:12
+ */
+@Data
 public class Column {
 
+	/**映射后的成员变量名*/
 	private String lowerProperty;
-
+	/**映射后首字母大写的成员变量名*/
 	private String property;
 
-	private String column;
-
 	private String type;
-
+	
+	private int dataType;
+	/**列名*/
+	private String column;
+	/**列的jdbc类型*/
 	private String jdbcType;
-
+	/**列注释*/
 	private String remark;
 
-	private int dataType;
 	
 
-	public String getLowerProperty() {
-		return lowerProperty;
-	}
-
-	public void setLowerProperty(String lowerProperty) {
-		this.lowerProperty = lowerProperty;
-	}
-
-	public String getProperty() {
-		return property;
-	}
-
-	public void setProperty(String property) {
-		this.property = property;
-	}
-
-	public String getColumn() {
-		return column;
-	}
-
-	public void setColumn(String column) {
-		this.column = column;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public String getJdbcType() {
-		return jdbcType;
-	}
-
-	public void setJdbcType(String jdbcType) {
-		this.jdbcType = jdbcType;
-	}
-
-	public String getRemark() {
-		return remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
-	public int getDataType() {
-		return dataType;
-	}
-
-	public void setDataType(int dataType) {
-		this.dataType = dataType;
-	}
-
-
+	
 	
 }

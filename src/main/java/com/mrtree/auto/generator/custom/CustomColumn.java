@@ -5,7 +5,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class CustomColumn {
+	/**列名*/
 	private String column;
+	/**映射后成员变量名*/
 	private String property;
 
 	@XmlAttribute

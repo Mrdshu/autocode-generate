@@ -1,23 +1,36 @@
-package com.mrtree.auto.generator.core;
+package com.mrtree.auto.generator.db;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ConnectionFactory {
-	private String url = "jdbc:mysql://127.0.0.1:3306/supercar";
-	
-	private String driver="com.mysql.jdbc.Driver";
-	
-	private String user = "root";
-	private String password = "123456";
+	private static String url = "";
+	private static String driver="";
+	private static String user = "";
+	private static String password = "";
 
-	private int poolSize = 1;
-
+	static {
+		Properties properties = new Properties(); 
+		try {
+			FileInputStream fileInputStream = new FileInputStream("src/main/resources/config/db.properties"); 
+			properties.load(fileInputStream);
+			url = properties.getProperty("url");
+			driver = properties.getProperty("driver");
+			user = properties.getProperty("user"); 
+			password = properties.getProperty("password"); 
+		} catch (Throwable e) {   
+			e.printStackTrace(); 
+		} 
+	}
+	private int poolSize = 1;  
+	 
 	private BlockingQueue<Connection> connectionPool = new LinkedBlockingQueue<>();
-
+   
 
 	private byte[] lock = new byte[0];
 
@@ -34,7 +47,6 @@ public class ConnectionFactory {
 				if (connectionPool.size() < poolSize) {//连接池未满，则创建新连接,并放入连接池
 					connection = createNewConnection();
 					connectionPool.put(connection);
-				//	return connection;
 				} 
 				connection = connectionPool.take();
 				return connection;
@@ -94,6 +106,10 @@ public class ConnectionFactory {
 	
 	private static class FactoryHolder{
 		static ConnectionFactory factory=new ConnectionFactory();
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 
 }
