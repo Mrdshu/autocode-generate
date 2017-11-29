@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoGroupMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoGroup" >	
+     	  	   	  	   	  	   	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="INT" /> 
+  	   	   	  	   	
+   	   		<result column="template" property="template" jdbcType="VARCHAR"  />
+	   	   		<result column="key_" property="key" jdbcType="VARCHAR"  />
+	   	   		<result column="name" property="name" jdbcType="VARCHAR"  />
+	   	   		<result column="icon" property="icon" jdbcType="VARCHAR"  />
+	   	   		<result column="alias" property="alias" jdbcType="VARCHAR"  />
+	   	   	   	   		<result column="status" property="status" jdbcType="INT"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	template,
+	  	    	  		  	key_,
+	  	    	  		  	name,
+	  	    	  		  	icon,
+	  	    	  		  	alias,
+	  	    	  		  	id,
+	  	    	  		  	status
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoGroupExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_group
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_group
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_group
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoGroup" >
+    insert into mto_group (
+    	    		  	template,
+		  	    	    		  	key_,
+		  	    	    		  	name,
+		  	    	    		  	icon,
+		  	    	    		  	alias,
+		  	    	    		  	id,
+		  	    	    		  	status
+	  	          )
+    values (
+     	        		#{template,jdbcType=VARCHAR},
+    	    	        		#{key,jdbcType=VARCHAR},
+    	    	        		#{name,jdbcType=VARCHAR},
+    	    	        		#{icon,jdbcType=VARCHAR},
+    	    	        		#{alias,jdbcType=VARCHAR},
+    	    	        		#{id,jdbcType=INT},
+    	    	        		#{status,jdbcType=INT}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoGroup" >
+    insert into mto_group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="template != null" >
+        template,
+      </if>
+            <if test="key != null" >
+        key_,
+      </if>
+            <if test="name != null" >
+        name,
+      </if>
+            <if test="icon != null" >
+        icon,
+      </if>
+            <if test="alias != null" >
+        alias,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="status != null" >
+        status,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="template != null" >
+        #{template,jdbcType=VARCHAR},
+      </if>
+            <if test="key != null" >
+        #{key,jdbcType=VARCHAR},
+      </if>
+            <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+            <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+            <if test="alias != null" >
+        #{alias,jdbcType=VARCHAR},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=INT},
+      </if>
+            <if test="status != null" >
+        #{status,jdbcType=INT},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoGroupExample" resultType="java.lang.Integer" >
+    select count(*) from mto_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoGroup" >
+    update mto_group
+    <set >
+            <if test="template != null" >
+         {template = #{template,jdbcType=VARCHAR},
+      </if>
+            <if test="key != null" >
+         {key_ = #{key,jdbcType=VARCHAR},
+      </if>
+            <if test="name != null" >
+         {name = #{name,jdbcType=VARCHAR},
+      </if>
+            <if test="icon != null" >
+         {icon = #{icon,jdbcType=VARCHAR},
+      </if>
+            <if test="alias != null" >
+         {alias = #{alias,jdbcType=VARCHAR},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=INT},
+      </if>
+            <if test="status != null" >
+         {status = #{status,jdbcType=INT},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoGroup" >
+    update mto_group
+    set 
+       	        		template = #{template,jdbcType=VARCHAR},
+    	    	        		key_ = #{key,jdbcType=VARCHAR},
+    	    	        		name = #{name,jdbcType=VARCHAR},
+    	    	        		icon = #{icon,jdbcType=VARCHAR},
+    	    	        		alias = #{alias,jdbcType=VARCHAR},
+    	    	        		id = #{id,jdbcType=INT},
+    	    	        		status = #{status,jdbcType=INT}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoFollowsMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoFollows" >	
+     	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	
+   	   		<result column="user_id" property="userId" jdbcType="BIGINT"  />
+	   	   		<result column="created" property="created" jdbcType="DATETIME"  />
+	   	   	   	   		<result column="follow_id" property="followId" jdbcType="BIGINT"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	user_id,
+	  	    	  		  	created,
+	  	    	  		  	id,
+	  	    	  		  	follow_id
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoFollowsExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_follows
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_follows
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_follows
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoFollows" >
+    insert into mto_follows (
+    	    		  	user_id,
+		  	    	    		  	created,
+		  	    	    		  	id,
+		  	    	    		  	follow_id
+	  	          )
+    values (
+     	        		#{userId,jdbcType=BIGINT},
+    	    	        		#{created,jdbcType=DATETIME},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{followId,jdbcType=BIGINT}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoFollows" >
+    insert into mto_follows
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+        user_id,
+      </if>
+            <if test="created != null" >
+        created,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="followId != null" >
+        follow_id,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+            <if test="created != null" >
+        #{created,jdbcType=DATETIME},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="followId != null" >
+        #{followId,jdbcType=BIGINT},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoFollowsExample" resultType="java.lang.Integer" >
+    select count(*) from mto_follows
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoFollows" >
+    update mto_follows
+    <set >
+            <if test="userId != null" >
+         {user_id = #{userId,jdbcType=BIGINT},
+      </if>
+            <if test="created != null" >
+         {created = #{created,jdbcType=DATETIME},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="followId != null" >
+         {follow_id = #{followId,jdbcType=BIGINT},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoFollows" >
+    update mto_follows
+    set 
+       	        		user_id = #{userId,jdbcType=BIGINT},
+    	    	        		created = #{created,jdbcType=DATETIME},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		follow_id = #{followId,jdbcType=BIGINT}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

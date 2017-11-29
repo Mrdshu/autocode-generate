@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoNotifyMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoNotify" >	
+     	  	   	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	  	   	  	   	
+   	   		<result column="from_id" property="fromId" jdbcType="BIGINT"  />
+	   	   		<result column="post_id" property="postId" jdbcType="BIGINT"  />
+	   	   		<result column="created" property="created" jdbcType="DATETIME"  />
+	   	   	   	   		<result column="event" property="event" jdbcType="INT"  />
+	   	   		<result column="own_id" property="ownId" jdbcType="BIGINT"  />
+	   	   		<result column="status" property="status" jdbcType="INT"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	from_id,
+	  	    	  		  	post_id,
+	  	    	  		  	created,
+	  	    	  		  	id,
+	  	    	  		  	event,
+	  	    	  		  	own_id,
+	  	    	  		  	status
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoNotifyExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_notify
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_notify
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_notify
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoNotify" >
+    insert into mto_notify (
+    	    		  	from_id,
+		  	    	    		  	post_id,
+		  	    	    		  	created,
+		  	    	    		  	id,
+		  	    	    		  	event,
+		  	    	    		  	own_id,
+		  	    	    		  	status
+	  	          )
+    values (
+     	        		#{fromId,jdbcType=BIGINT},
+    	    	        		#{postId,jdbcType=BIGINT},
+    	    	        		#{created,jdbcType=DATETIME},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{event,jdbcType=INT},
+    	    	        		#{ownId,jdbcType=BIGINT},
+    	    	        		#{status,jdbcType=INT}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoNotify" >
+    insert into mto_notify
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="fromId != null" >
+        from_id,
+      </if>
+            <if test="postId != null" >
+        post_id,
+      </if>
+            <if test="created != null" >
+        created,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="event != null" >
+        event,
+      </if>
+            <if test="ownId != null" >
+        own_id,
+      </if>
+            <if test="status != null" >
+        status,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="fromId != null" >
+        #{fromId,jdbcType=BIGINT},
+      </if>
+            <if test="postId != null" >
+        #{postId,jdbcType=BIGINT},
+      </if>
+            <if test="created != null" >
+        #{created,jdbcType=DATETIME},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="event != null" >
+        #{event,jdbcType=INT},
+      </if>
+            <if test="ownId != null" >
+        #{ownId,jdbcType=BIGINT},
+      </if>
+            <if test="status != null" >
+        #{status,jdbcType=INT},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoNotifyExample" resultType="java.lang.Integer" >
+    select count(*) from mto_notify
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoNotify" >
+    update mto_notify
+    <set >
+            <if test="fromId != null" >
+         {from_id = #{fromId,jdbcType=BIGINT},
+      </if>
+            <if test="postId != null" >
+         {post_id = #{postId,jdbcType=BIGINT},
+      </if>
+            <if test="created != null" >
+         {created = #{created,jdbcType=DATETIME},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="event != null" >
+         {event = #{event,jdbcType=INT},
+      </if>
+            <if test="ownId != null" >
+         {own_id = #{ownId,jdbcType=BIGINT},
+      </if>
+            <if test="status != null" >
+         {status = #{status,jdbcType=INT},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoNotify" >
+    update mto_notify
+    set 
+       	        		from_id = #{fromId,jdbcType=BIGINT},
+    	    	        		post_id = #{postId,jdbcType=BIGINT},
+    	    	        		created = #{created,jdbcType=DATETIME},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		event = #{event,jdbcType=INT},
+    	    	        		own_id = #{ownId,jdbcType=BIGINT},
+    	    	        		status = #{status,jdbcType=INT}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

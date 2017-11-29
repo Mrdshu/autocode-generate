@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoAttachsMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoAttachs" >	
+     	  	   	  	   	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	  	   	  	   	  	   	
+   	   		<result column="preview" property="preview" jdbcType="VARCHAR"  />
+	   	   		<result column="original" property="original" jdbcType="VARCHAR"  />
+	   	   		<result column="width" property="width" jdbcType="INT"  />
+	   	   		<result column="to_id" property="toId" jdbcType="BIGINT"  />
+	   	   	   	   		<result column="screenshot" property="screenshot" jdbcType="VARCHAR"  />
+	   	   		<result column="store" property="store" jdbcType="INT"  />
+	   	   		<result column="height" property="height" jdbcType="INT"  />
+	   	   		<result column="status" property="status" jdbcType="INT"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	preview,
+	  	    	  		  	original,
+	  	    	  		  	width,
+	  	    	  		  	to_id,
+	  	    	  		  	id,
+	  	    	  		  	screenshot,
+	  	    	  		  	store,
+	  	    	  		  	height,
+	  	    	  		  	status
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoAttachsExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_attachs
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_attachs
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_attachs
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoAttachs" >
+    insert into mto_attachs (
+    	    		  	preview,
+		  	    	    		  	original,
+		  	    	    		  	width,
+		  	    	    		  	to_id,
+		  	    	    		  	id,
+		  	    	    		  	screenshot,
+		  	    	    		  	store,
+		  	    	    		  	height,
+		  	    	    		  	status
+	  	          )
+    values (
+     	        		#{preview,jdbcType=VARCHAR},
+    	    	        		#{original,jdbcType=VARCHAR},
+    	    	        		#{width,jdbcType=INT},
+    	    	        		#{toId,jdbcType=BIGINT},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{screenshot,jdbcType=VARCHAR},
+    	    	        		#{store,jdbcType=INT},
+    	    	        		#{height,jdbcType=INT},
+    	    	        		#{status,jdbcType=INT}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoAttachs" >
+    insert into mto_attachs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="preview != null" >
+        preview,
+      </if>
+            <if test="original != null" >
+        original,
+      </if>
+            <if test="width != null" >
+        width,
+      </if>
+            <if test="toId != null" >
+        to_id,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="screenshot != null" >
+        screenshot,
+      </if>
+            <if test="store != null" >
+        store,
+      </if>
+            <if test="height != null" >
+        height,
+      </if>
+            <if test="status != null" >
+        status,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="preview != null" >
+        #{preview,jdbcType=VARCHAR},
+      </if>
+            <if test="original != null" >
+        #{original,jdbcType=VARCHAR},
+      </if>
+            <if test="width != null" >
+        #{width,jdbcType=INT},
+      </if>
+            <if test="toId != null" >
+        #{toId,jdbcType=BIGINT},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="screenshot != null" >
+        #{screenshot,jdbcType=VARCHAR},
+      </if>
+            <if test="store != null" >
+        #{store,jdbcType=INT},
+      </if>
+            <if test="height != null" >
+        #{height,jdbcType=INT},
+      </if>
+            <if test="status != null" >
+        #{status,jdbcType=INT},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoAttachsExample" resultType="java.lang.Integer" >
+    select count(*) from mto_attachs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoAttachs" >
+    update mto_attachs
+    <set >
+            <if test="preview != null" >
+         {preview = #{preview,jdbcType=VARCHAR},
+      </if>
+            <if test="original != null" >
+         {original = #{original,jdbcType=VARCHAR},
+      </if>
+            <if test="width != null" >
+         {width = #{width,jdbcType=INT},
+      </if>
+            <if test="toId != null" >
+         {to_id = #{toId,jdbcType=BIGINT},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="screenshot != null" >
+         {screenshot = #{screenshot,jdbcType=VARCHAR},
+      </if>
+            <if test="store != null" >
+         {store = #{store,jdbcType=INT},
+      </if>
+            <if test="height != null" >
+         {height = #{height,jdbcType=INT},
+      </if>
+            <if test="status != null" >
+         {status = #{status,jdbcType=INT},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoAttachs" >
+    update mto_attachs
+    set 
+       	        		preview = #{preview,jdbcType=VARCHAR},
+    	    	        		original = #{original,jdbcType=VARCHAR},
+    	    	        		width = #{width,jdbcType=INT},
+    	    	        		to_id = #{toId,jdbcType=BIGINT},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		screenshot = #{screenshot,jdbcType=VARCHAR},
+    	    	        		store = #{store,jdbcType=INT},
+    	    	        		height = #{height,jdbcType=INT},
+    	    	        		status = #{status,jdbcType=INT}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

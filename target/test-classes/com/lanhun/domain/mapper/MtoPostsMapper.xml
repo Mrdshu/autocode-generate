@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoPostsMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoPosts" >	
+     	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	  	   	  	   	  	   	
+   	   		<result column="summary" property="summary" jdbcType="VARCHAR"  />
+	   	   		<result column="editor" property="editor" jdbcType="VARCHAR"  />
+	   	   		<result column="featured" property="featured" jdbcType="INT"  />
+	   	   		<result column="images" property="images" jdbcType="INT"  />
+	   	   		<result column="comments" property="comments" jdbcType="INT"  />
+	   	   		<result column="created" property="created" jdbcType="DATETIME"  />
+	   	   		<result column="favors" property="favors" jdbcType="INT"  />
+	   	   		<result column="privacy" property="privacy" jdbcType="INT"  />
+	   	   		<result column="last_image_id" property="lastImageId" jdbcType="BIGINT"  />
+	   	   		<result column="title" property="title" jdbcType="VARCHAR"  />
+	   	   		<result column="content" property="content" jdbcType="LONGTEXT"  />
+	   	   		<result column="tags" property="tags" jdbcType="VARCHAR"  />
+	   	   		<result column="markdown" property="markdown" jdbcType="LONGTEXT"  />
+	   	   	   	   		<result column="author_id" property="authorId" jdbcType="BIGINT"  />
+	   	   		<result column="group_" property="group" jdbcType="INT"  />
+	   	   		<result column="views" property="views" jdbcType="INT"  />
+	   	   		<result column="status" property="status" jdbcType="INT"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	summary,
+	  	    	  		  	editor,
+	  	    	  		  	featured,
+	  	    	  		  	images,
+	  	    	  		  	comments,
+	  	    	  		  	created,
+	  	    	  		  	favors,
+	  	    	  		  	privacy,
+	  	    	  		  	last_image_id,
+	  	    	  		  	title,
+	  	    	  		  	content,
+	  	    	  		  	tags,
+	  	    	  		  	markdown,
+	  	    	  		  	id,
+	  	    	  		  	author_id,
+	  	    	  		  	group_,
+	  	    	  		  	views,
+	  	    	  		  	status
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoPostsExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_posts
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_posts
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_posts
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoPosts" >
+    insert into mto_posts (
+    	    		  	summary,
+		  	    	    		  	editor,
+		  	    	    		  	featured,
+		  	    	    		  	images,
+		  	    	    		  	comments,
+		  	    	    		  	created,
+		  	    	    		  	favors,
+		  	    	    		  	privacy,
+		  	    	    		  	last_image_id,
+		  	    	    		  	title,
+		  	    	    		  	content,
+		  	    	    		  	tags,
+		  	    	    		  	markdown,
+		  	    	    		  	id,
+		  	    	    		  	author_id,
+		  	    	    		  	group_,
+		  	    	    		  	views,
+		  	    	    		  	status
+	  	          )
+    values (
+     	        		#{summary,jdbcType=VARCHAR},
+    	    	        		#{editor,jdbcType=VARCHAR},
+    	    	        		#{featured,jdbcType=INT},
+    	    	        		#{images,jdbcType=INT},
+    	    	        		#{comments,jdbcType=INT},
+    	    	        		#{created,jdbcType=DATETIME},
+    	    	        		#{favors,jdbcType=INT},
+    	    	        		#{privacy,jdbcType=INT},
+    	    	        		#{lastImageId,jdbcType=BIGINT},
+    	    	        		#{title,jdbcType=VARCHAR},
+    	    	        		#{content,jdbcType=LONGTEXT},
+    	    	        		#{tags,jdbcType=VARCHAR},
+    	    	        		#{markdown,jdbcType=LONGTEXT},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{authorId,jdbcType=BIGINT},
+    	    	        		#{group,jdbcType=INT},
+    	    	        		#{views,jdbcType=INT},
+    	    	        		#{status,jdbcType=INT}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoPosts" >
+    insert into mto_posts
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="summary != null" >
+        summary,
+      </if>
+            <if test="editor != null" >
+        editor,
+      </if>
+            <if test="featured != null" >
+        featured,
+      </if>
+            <if test="images != null" >
+        images,
+      </if>
+            <if test="comments != null" >
+        comments,
+      </if>
+            <if test="created != null" >
+        created,
+      </if>
+            <if test="favors != null" >
+        favors,
+      </if>
+            <if test="privacy != null" >
+        privacy,
+      </if>
+            <if test="lastImageId != null" >
+        last_image_id,
+      </if>
+            <if test="title != null" >
+        title,
+      </if>
+            <if test="content != null" >
+        content,
+      </if>
+            <if test="tags != null" >
+        tags,
+      </if>
+            <if test="markdown != null" >
+        markdown,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="authorId != null" >
+        author_id,
+      </if>
+            <if test="group != null" >
+        group_,
+      </if>
+            <if test="views != null" >
+        views,
+      </if>
+            <if test="status != null" >
+        status,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="summary != null" >
+        #{summary,jdbcType=VARCHAR},
+      </if>
+            <if test="editor != null" >
+        #{editor,jdbcType=VARCHAR},
+      </if>
+            <if test="featured != null" >
+        #{featured,jdbcType=INT},
+      </if>
+            <if test="images != null" >
+        #{images,jdbcType=INT},
+      </if>
+            <if test="comments != null" >
+        #{comments,jdbcType=INT},
+      </if>
+            <if test="created != null" >
+        #{created,jdbcType=DATETIME},
+      </if>
+            <if test="favors != null" >
+        #{favors,jdbcType=INT},
+      </if>
+            <if test="privacy != null" >
+        #{privacy,jdbcType=INT},
+      </if>
+            <if test="lastImageId != null" >
+        #{lastImageId,jdbcType=BIGINT},
+      </if>
+            <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+            <if test="content != null" >
+        #{content,jdbcType=LONGTEXT},
+      </if>
+            <if test="tags != null" >
+        #{tags,jdbcType=VARCHAR},
+      </if>
+            <if test="markdown != null" >
+        #{markdown,jdbcType=LONGTEXT},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="authorId != null" >
+        #{authorId,jdbcType=BIGINT},
+      </if>
+            <if test="group != null" >
+        #{group,jdbcType=INT},
+      </if>
+            <if test="views != null" >
+        #{views,jdbcType=INT},
+      </if>
+            <if test="status != null" >
+        #{status,jdbcType=INT},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoPostsExample" resultType="java.lang.Integer" >
+    select count(*) from mto_posts
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoPosts" >
+    update mto_posts
+    <set >
+            <if test="summary != null" >
+         {summary = #{summary,jdbcType=VARCHAR},
+      </if>
+            <if test="editor != null" >
+         {editor = #{editor,jdbcType=VARCHAR},
+      </if>
+            <if test="featured != null" >
+         {featured = #{featured,jdbcType=INT},
+      </if>
+            <if test="images != null" >
+         {images = #{images,jdbcType=INT},
+      </if>
+            <if test="comments != null" >
+         {comments = #{comments,jdbcType=INT},
+      </if>
+            <if test="created != null" >
+         {created = #{created,jdbcType=DATETIME},
+      </if>
+            <if test="favors != null" >
+         {favors = #{favors,jdbcType=INT},
+      </if>
+            <if test="privacy != null" >
+         {privacy = #{privacy,jdbcType=INT},
+      </if>
+            <if test="lastImageId != null" >
+         {last_image_id = #{lastImageId,jdbcType=BIGINT},
+      </if>
+            <if test="title != null" >
+         {title = #{title,jdbcType=VARCHAR},
+      </if>
+            <if test="content != null" >
+         {content = #{content,jdbcType=LONGTEXT},
+      </if>
+            <if test="tags != null" >
+         {tags = #{tags,jdbcType=VARCHAR},
+      </if>
+            <if test="markdown != null" >
+         {markdown = #{markdown,jdbcType=LONGTEXT},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="authorId != null" >
+         {author_id = #{authorId,jdbcType=BIGINT},
+      </if>
+            <if test="group != null" >
+         {group_ = #{group,jdbcType=INT},
+      </if>
+            <if test="views != null" >
+         {views = #{views,jdbcType=INT},
+      </if>
+            <if test="status != null" >
+         {status = #{status,jdbcType=INT},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoPosts" >
+    update mto_posts
+    set 
+       	        		summary = #{summary,jdbcType=VARCHAR},
+    	    	        		editor = #{editor,jdbcType=VARCHAR},
+    	    	        		featured = #{featured,jdbcType=INT},
+    	    	        		images = #{images,jdbcType=INT},
+    	    	        		comments = #{comments,jdbcType=INT},
+    	    	        		created = #{created,jdbcType=DATETIME},
+    	    	        		favors = #{favors,jdbcType=INT},
+    	    	        		privacy = #{privacy,jdbcType=INT},
+    	    	        		last_image_id = #{lastImageId,jdbcType=BIGINT},
+    	    	        		title = #{title,jdbcType=VARCHAR},
+    	    	        		content = #{content,jdbcType=LONGTEXT},
+    	    	        		tags = #{tags,jdbcType=VARCHAR},
+    	    	        		markdown = #{markdown,jdbcType=LONGTEXT},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		author_id = #{authorId,jdbcType=BIGINT},
+    	    	        		group_ = #{group,jdbcType=INT},
+    	    	        		views = #{views,jdbcType=INT},
+    	    	        		status = #{status,jdbcType=INT}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

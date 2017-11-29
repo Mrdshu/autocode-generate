@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tables>
+
+	<!-- <table tableName="tb_repair_item">
+        <columnOverride column="RI_TYPE"  property="type"/>
+        <columnOverride column="RI_CODE" property="code" />
+        <columnOverride column="RI_NAME" property="name"/>
+        <columnOverride column="RI_WORKING_HOUR" property="workHour" />
+        <columnOverride column="RI_WORK_TYPE" property="workType" />
+        <columnOverride column="RI_DESC" property="description" />
+        <columnOverride column="RI_SUM" property="sum"/>
+	</table> -->
+	
+	<table  tableName="tb_out_part">
+        <columnOverride column="OUT_WORKORDER_NO"  property="workOrderNo"/>
+        <columnOverride column="OUT_TYPE"  property="type"/>
+        <columnOverride column="OUT_CLIENT_NAME" property="clientName" />
+        <columnOverride column="OUT_RECEIVER" property="receiver"/>
+        <columnOverride column="OUT_SUM" property="sum" />
+        <columnOverride column="COMPANY" property="company" />
+        <columnOverride column="DEPARTMENT" property="departmentLK" />
+        <columnOverride column="REPAIR_WORKORDER_NO" property="repairWorkorderNo" />
+        <columnOverride column="CAR_NO" property="carNo" />
+        <columnOverride column="ISDELETED" property="isDeleted" />
+        <columnOverride column="OUT_TIME" property="outTime"/>
+    </table>
+    
+    <table tableName = "tb_out_part_info">
+	    <columnOverride column="OUT_WORKORDER_NO"  property="workOrderNo" />
+    	<columnOverride column="INVENTORY_ID" property="inventoryId" />
+    	<columnOverride column="P_SALE"  property="sale" />
+    	<columnOverride column="OUT_COUNT"  property="count" />
+    	<columnOverride column="ISDELETED" property="isDeleted" />
+  	</table>
+	
+		
+</tables>

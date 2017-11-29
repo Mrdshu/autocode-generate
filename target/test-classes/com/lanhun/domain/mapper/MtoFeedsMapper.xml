@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoFeedsMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoFeeds" >	
+     	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	  	   	  	   	
+   	   		<result column="post_id" property="postId" jdbcType="BIGINT"  />
+	   	   		<result column="created" property="created" jdbcType="DATETIME"  />
+	   	   	   	   		<result column="author_id" property="authorId" jdbcType="BIGINT"  />
+	   	   		<result column="type" property="type" jdbcType="INT"  />
+	   	   		<result column="own_id" property="ownId" jdbcType="BIGINT"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	post_id,
+	  	    	  		  	created,
+	  	    	  		  	id,
+	  	    	  		  	author_id,
+	  	    	  		  	type,
+	  	    	  		  	own_id
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoFeedsExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_feeds
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_feeds
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_feeds
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoFeeds" >
+    insert into mto_feeds (
+    	    		  	post_id,
+		  	    	    		  	created,
+		  	    	    		  	id,
+		  	    	    		  	author_id,
+		  	    	    		  	type,
+		  	    	    		  	own_id
+	  	          )
+    values (
+     	        		#{postId,jdbcType=BIGINT},
+    	    	        		#{created,jdbcType=DATETIME},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{authorId,jdbcType=BIGINT},
+    	    	        		#{type,jdbcType=INT},
+    	    	        		#{ownId,jdbcType=BIGINT}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoFeeds" >
+    insert into mto_feeds
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="postId != null" >
+        post_id,
+      </if>
+            <if test="created != null" >
+        created,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="authorId != null" >
+        author_id,
+      </if>
+            <if test="type != null" >
+        type,
+      </if>
+            <if test="ownId != null" >
+        own_id,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="postId != null" >
+        #{postId,jdbcType=BIGINT},
+      </if>
+            <if test="created != null" >
+        #{created,jdbcType=DATETIME},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="authorId != null" >
+        #{authorId,jdbcType=BIGINT},
+      </if>
+            <if test="type != null" >
+        #{type,jdbcType=INT},
+      </if>
+            <if test="ownId != null" >
+        #{ownId,jdbcType=BIGINT},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoFeedsExample" resultType="java.lang.Integer" >
+    select count(*) from mto_feeds
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoFeeds" >
+    update mto_feeds
+    <set >
+            <if test="postId != null" >
+         {post_id = #{postId,jdbcType=BIGINT},
+      </if>
+            <if test="created != null" >
+         {created = #{created,jdbcType=DATETIME},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="authorId != null" >
+         {author_id = #{authorId,jdbcType=BIGINT},
+      </if>
+            <if test="type != null" >
+         {type = #{type,jdbcType=INT},
+      </if>
+            <if test="ownId != null" >
+         {own_id = #{ownId,jdbcType=BIGINT},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoFeeds" >
+    update mto_feeds
+    set 
+       	        		post_id = #{postId,jdbcType=BIGINT},
+    	    	        		created = #{created,jdbcType=DATETIME},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		author_id = #{authorId,jdbcType=BIGINT},
+    	    	        		type = #{type,jdbcType=INT},
+    	    	        		own_id = #{ownId,jdbcType=BIGINT}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

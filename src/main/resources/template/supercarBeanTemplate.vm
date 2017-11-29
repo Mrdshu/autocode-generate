@@ -1,0 +1,41 @@
+package ${modelPackage};
+
+#if (${hasDate})
+import java.util.Date;
+#end
+
+#if (${hasBigdecimal})
+import java.math.BigDecimal;
+#end
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+/**
+ * <p>
+ *${remark}
+ * </p>
+ * 
+ * @author wangsz
+ * @date ${dateTime}
+ */
+@Setter
+@Getter
+@ToString @AllArgsConstructor @NoArgsConstructor
+public class ${beanName} extends BaseDateEntity {
+	#foreach ($item in $columns) 
+	
+	#if (${item.remark} && ${item.remark}!='' )
+   	/** ${item.remark} */
+    #end
+	private ${item.type} ${item.lowerProperty};
+	#end
+	
+	public static enum DP {
+		id,#foreach( $item in ${columns})#if (${velocityCount} < ${columns.size()}) ${item.lowerProperty},#else ${item.lowerProperty};#end#end
+	
+	}
+}

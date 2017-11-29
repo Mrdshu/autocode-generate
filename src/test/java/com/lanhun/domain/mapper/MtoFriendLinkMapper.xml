@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoFriendLinkMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoFriendLink" >	
+     	  	   	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	  	   	
+   	   		<result column="site_name" property="siteName" jdbcType="VARCHAR"  />
+	   	   		<result column="logo" property="logo" jdbcType="VARCHAR"  />
+	   	   		<result column="remark" property="remark" jdbcType="VARCHAR"  />
+	   	   	   	   		<result column="sort" property="sort" jdbcType="INT"  />
+	   	   		<result column="url" property="url" jdbcType="VARCHAR"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	site_name,
+	  	    	  		  	logo,
+	  	    	  		  	remark,
+	  	    	  		  	id,
+	  	    	  		  	sort,
+	  	    	  		  	url
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoFriendLinkExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_friend_link
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_friend_link
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_friend_link
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoFriendLink" >
+    insert into mto_friend_link (
+    	    		  	site_name,
+		  	    	    		  	logo,
+		  	    	    		  	remark,
+		  	    	    		  	id,
+		  	    	    		  	sort,
+		  	    	    		  	url
+	  	          )
+    values (
+     	        		#{siteName,jdbcType=VARCHAR},
+    	    	        		#{logo,jdbcType=VARCHAR},
+    	    	        		#{remark,jdbcType=VARCHAR},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{sort,jdbcType=INT},
+    	    	        		#{url,jdbcType=VARCHAR}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoFriendLink" >
+    insert into mto_friend_link
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="siteName != null" >
+        site_name,
+      </if>
+            <if test="logo != null" >
+        logo,
+      </if>
+            <if test="remark != null" >
+        remark,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="sort != null" >
+        sort,
+      </if>
+            <if test="url != null" >
+        url,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="siteName != null" >
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+            <if test="logo != null" >
+        #{logo,jdbcType=VARCHAR},
+      </if>
+            <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="sort != null" >
+        #{sort,jdbcType=INT},
+      </if>
+            <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoFriendLinkExample" resultType="java.lang.Integer" >
+    select count(*) from mto_friend_link
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoFriendLink" >
+    update mto_friend_link
+    <set >
+            <if test="siteName != null" >
+         {site_name = #{siteName,jdbcType=VARCHAR},
+      </if>
+            <if test="logo != null" >
+         {logo = #{logo,jdbcType=VARCHAR},
+      </if>
+            <if test="remark != null" >
+         {remark = #{remark,jdbcType=VARCHAR},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="sort != null" >
+         {sort = #{sort,jdbcType=INT},
+      </if>
+            <if test="url != null" >
+         {url = #{url,jdbcType=VARCHAR},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoFriendLink" >
+    update mto_friend_link
+    set 
+       	        		site_name = #{siteName,jdbcType=VARCHAR},
+    	    	        		logo = #{logo,jdbcType=VARCHAR},
+    	    	        		remark = #{remark,jdbcType=VARCHAR},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		sort = #{sort,jdbcType=INT},
+    	    	        		url = #{url,jdbcType=VARCHAR}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

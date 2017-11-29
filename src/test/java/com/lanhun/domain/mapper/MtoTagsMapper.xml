@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoTagsMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoTags" >	
+     	  	   	  	   	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	  	   	
+   	   		<result column="featured" property="featured" jdbcType="INT"  />
+	   	   		<result column="hots" property="hots" jdbcType="INT"  />
+	   	   		<result column="last_post_id" property="lastPostId" jdbcType="BIGINT"  />
+	   	   		<result column="name" property="name" jdbcType="VARCHAR"  />
+	   	   	   	   		<result column="locked" property="locked" jdbcType="INT"  />
+	   	   		<result column="posts" property="posts" jdbcType="INT"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	featured,
+	  	    	  		  	hots,
+	  	    	  		  	last_post_id,
+	  	    	  		  	name,
+	  	    	  		  	id,
+	  	    	  		  	locked,
+	  	    	  		  	posts
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoTagsExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_tags
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_tags
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_tags
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoTags" >
+    insert into mto_tags (
+    	    		  	featured,
+		  	    	    		  	hots,
+		  	    	    		  	last_post_id,
+		  	    	    		  	name,
+		  	    	    		  	id,
+		  	    	    		  	locked,
+		  	    	    		  	posts
+	  	          )
+    values (
+     	        		#{featured,jdbcType=INT},
+    	    	        		#{hots,jdbcType=INT},
+    	    	        		#{lastPostId,jdbcType=BIGINT},
+    	    	        		#{name,jdbcType=VARCHAR},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{locked,jdbcType=INT},
+    	    	        		#{posts,jdbcType=INT}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoTags" >
+    insert into mto_tags
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="featured != null" >
+        featured,
+      </if>
+            <if test="hots != null" >
+        hots,
+      </if>
+            <if test="lastPostId != null" >
+        last_post_id,
+      </if>
+            <if test="name != null" >
+        name,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="locked != null" >
+        locked,
+      </if>
+            <if test="posts != null" >
+        posts,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="featured != null" >
+        #{featured,jdbcType=INT},
+      </if>
+            <if test="hots != null" >
+        #{hots,jdbcType=INT},
+      </if>
+            <if test="lastPostId != null" >
+        #{lastPostId,jdbcType=BIGINT},
+      </if>
+            <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="locked != null" >
+        #{locked,jdbcType=INT},
+      </if>
+            <if test="posts != null" >
+        #{posts,jdbcType=INT},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoTagsExample" resultType="java.lang.Integer" >
+    select count(*) from mto_tags
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoTags" >
+    update mto_tags
+    <set >
+            <if test="featured != null" >
+         {featured = #{featured,jdbcType=INT},
+      </if>
+            <if test="hots != null" >
+         {hots = #{hots,jdbcType=INT},
+      </if>
+            <if test="lastPostId != null" >
+         {last_post_id = #{lastPostId,jdbcType=BIGINT},
+      </if>
+            <if test="name != null" >
+         {name = #{name,jdbcType=VARCHAR},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="locked != null" >
+         {locked = #{locked,jdbcType=INT},
+      </if>
+            <if test="posts != null" >
+         {posts = #{posts,jdbcType=INT},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoTags" >
+    update mto_tags
+    set 
+       	        		featured = #{featured,jdbcType=INT},
+    	    	        		hots = #{hots,jdbcType=INT},
+    	    	        		last_post_id = #{lastPostId,jdbcType=BIGINT},
+    	    	        		name = #{name,jdbcType=VARCHAR},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		locked = #{locked,jdbcType=INT},
+    	    	        		posts = #{posts,jdbcType=INT}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

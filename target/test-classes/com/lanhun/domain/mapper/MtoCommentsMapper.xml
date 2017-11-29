@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoCommentsMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoComments" >	
+     	  	   	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	  	   	  	   	
+   	   		<result column="created" property="created" jdbcType="DATETIME"  />
+	   	   		<result column="to_id" property="toId" jdbcType="BIGINT"  />
+	   	   		<result column="pid" property="pid" jdbcType="BIGINT"  />
+	   	   	   	   		<result column="author_id" property="authorId" jdbcType="BIGINT"  />
+	   	   		<result column="content" property="content" jdbcType="VARCHAR"  />
+	   	   		<result column="status" property="status" jdbcType="INT"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	created,
+	  	    	  		  	to_id,
+	  	    	  		  	pid,
+	  	    	  		  	id,
+	  	    	  		  	author_id,
+	  	    	  		  	content,
+	  	    	  		  	status
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoCommentsExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_comments
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_comments
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_comments
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoComments" >
+    insert into mto_comments (
+    	    		  	created,
+		  	    	    		  	to_id,
+		  	    	    		  	pid,
+		  	    	    		  	id,
+		  	    	    		  	author_id,
+		  	    	    		  	content,
+		  	    	    		  	status
+	  	          )
+    values (
+     	        		#{created,jdbcType=DATETIME},
+    	    	        		#{toId,jdbcType=BIGINT},
+    	    	        		#{pid,jdbcType=BIGINT},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{authorId,jdbcType=BIGINT},
+    	    	        		#{content,jdbcType=VARCHAR},
+    	    	        		#{status,jdbcType=INT}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoComments" >
+    insert into mto_comments
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="created != null" >
+        created,
+      </if>
+            <if test="toId != null" >
+        to_id,
+      </if>
+            <if test="pid != null" >
+        pid,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="authorId != null" >
+        author_id,
+      </if>
+            <if test="content != null" >
+        content,
+      </if>
+            <if test="status != null" >
+        status,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="created != null" >
+        #{created,jdbcType=DATETIME},
+      </if>
+            <if test="toId != null" >
+        #{toId,jdbcType=BIGINT},
+      </if>
+            <if test="pid != null" >
+        #{pid,jdbcType=BIGINT},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="authorId != null" >
+        #{authorId,jdbcType=BIGINT},
+      </if>
+            <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+            <if test="status != null" >
+        #{status,jdbcType=INT},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoCommentsExample" resultType="java.lang.Integer" >
+    select count(*) from mto_comments
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoComments" >
+    update mto_comments
+    <set >
+            <if test="created != null" >
+         {created = #{created,jdbcType=DATETIME},
+      </if>
+            <if test="toId != null" >
+         {to_id = #{toId,jdbcType=BIGINT},
+      </if>
+            <if test="pid != null" >
+         {pid = #{pid,jdbcType=BIGINT},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="authorId != null" >
+         {author_id = #{authorId,jdbcType=BIGINT},
+      </if>
+            <if test="content != null" >
+         {content = #{content,jdbcType=VARCHAR},
+      </if>
+            <if test="status != null" >
+         {status = #{status,jdbcType=INT},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoComments" >
+    update mto_comments
+    set 
+       	        		created = #{created,jdbcType=DATETIME},
+    	    	        		to_id = #{toId,jdbcType=BIGINT},
+    	    	        		pid = #{pid,jdbcType=BIGINT},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		author_id = #{authorId,jdbcType=BIGINT},
+    	    	        		content = #{content,jdbcType=VARCHAR},
+    	    	        		status = #{status,jdbcType=INT}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

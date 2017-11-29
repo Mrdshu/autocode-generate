@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoMenuMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoMenu" >	
+     	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="INT" /> 
+  	   	   	  	   	  	   	  	   	
+   	   		<result column="name" property="name" jdbcType="VARCHAR"  />
+	   	   		<result column="weight" property="weight" jdbcType="INT"  />
+	   	   	   	   		<result column="url" property="url" jdbcType="VARCHAR"  />
+	   	   		<result column="target" property="target" jdbcType="VARCHAR"  />
+	   	   		<result column="status" property="status" jdbcType="INT"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	name,
+	  	    	  		  	weight,
+	  	    	  		  	id,
+	  	    	  		  	url,
+	  	    	  		  	target,
+	  	    	  		  	status
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoMenuExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_menu
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_menu
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_menu
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoMenu" >
+    insert into mto_menu (
+    	    		  	name,
+		  	    	    		  	weight,
+		  	    	    		  	id,
+		  	    	    		  	url,
+		  	    	    		  	target,
+		  	    	    		  	status
+	  	          )
+    values (
+     	        		#{name,jdbcType=VARCHAR},
+    	    	        		#{weight,jdbcType=INT},
+    	    	        		#{id,jdbcType=INT},
+    	    	        		#{url,jdbcType=VARCHAR},
+    	    	        		#{target,jdbcType=VARCHAR},
+    	    	        		#{status,jdbcType=INT}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoMenu" >
+    insert into mto_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+        name,
+      </if>
+            <if test="weight != null" >
+        weight,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="url != null" >
+        url,
+      </if>
+            <if test="target != null" >
+        target,
+      </if>
+            <if test="status != null" >
+        status,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+            <if test="weight != null" >
+        #{weight,jdbcType=INT},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=INT},
+      </if>
+            <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+            <if test="target != null" >
+        #{target,jdbcType=VARCHAR},
+      </if>
+            <if test="status != null" >
+        #{status,jdbcType=INT},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoMenuExample" resultType="java.lang.Integer" >
+    select count(*) from mto_menu
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoMenu" >
+    update mto_menu
+    <set >
+            <if test="name != null" >
+         {name = #{name,jdbcType=VARCHAR},
+      </if>
+            <if test="weight != null" >
+         {weight = #{weight,jdbcType=INT},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=INT},
+      </if>
+            <if test="url != null" >
+         {url = #{url,jdbcType=VARCHAR},
+      </if>
+            <if test="target != null" >
+         {target = #{target,jdbcType=VARCHAR},
+      </if>
+            <if test="status != null" >
+         {status = #{status,jdbcType=INT},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoMenu" >
+    update mto_menu
+    set 
+       	        		name = #{name,jdbcType=VARCHAR},
+    	    	        		weight = #{weight,jdbcType=INT},
+    	    	        		id = #{id,jdbcType=INT},
+    	    	        		url = #{url,jdbcType=VARCHAR},
+    	    	        		target = #{target,jdbcType=VARCHAR},
+    	    	        		status = #{status,jdbcType=INT}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

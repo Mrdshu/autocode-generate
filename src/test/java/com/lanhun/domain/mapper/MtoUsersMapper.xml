@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoUsersMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoUsers" >	
+     	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	  	   	  	   	  	   	  	   	
+   	   		<result column="comments" property="comments" jdbcType="INT"  />
+	   	   		<result column="gender" property="gender" jdbcType="INT"  />
+	   	   		<result column="signature" property="signature" jdbcType="VARCHAR"  />
+	   	   		<result column="created" property="created" jdbcType="DATETIME"  />
+	   	   		<result column="last_login" property="lastLogin" jdbcType="DATETIME"  />
+	   	   		<result column="mobile" property="mobile" jdbcType="VARCHAR"  />
+	   	   		<result column="follows" property="follows" jdbcType="INT"  />
+	   	   		<result column="favors" property="favors" jdbcType="INT"  />
+	   	   		<result column="avatar" property="avatar" jdbcType="VARCHAR"  />
+	   	   		<result column="source" property="source" jdbcType="INT"  />
+	   	   		<result column="posts" property="posts" jdbcType="INT"  />
+	   	   		<result column="fans" property="fans" jdbcType="INT"  />
+	   	   		<result column="password" property="password" jdbcType="VARCHAR"  />
+	   	   		<result column="role_id" property="roleId" jdbcType="INT"  />
+	   	   		<result column="name" property="name" jdbcType="VARCHAR"  />
+	   	   	   	   		<result column="active_email" property="activeEmail" jdbcType="INT"  />
+	   	   		<result column="updated" property="updated" jdbcType="DATETIME"  />
+	   	   		<result column="email" property="email" jdbcType="VARCHAR"  />
+	   	   		<result column="status" property="status" jdbcType="INT"  />
+	   	   		<result column="username" property="username" jdbcType="VARCHAR"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	comments,
+	  	    	  		  	gender,
+	  	    	  		  	signature,
+	  	    	  		  	created,
+	  	    	  		  	last_login,
+	  	    	  		  	mobile,
+	  	    	  		  	follows,
+	  	    	  		  	favors,
+	  	    	  		  	avatar,
+	  	    	  		  	source,
+	  	    	  		  	posts,
+	  	    	  		  	fans,
+	  	    	  		  	password,
+	  	    	  		  	role_id,
+	  	    	  		  	name,
+	  	    	  		  	id,
+	  	    	  		  	active_email,
+	  	    	  		  	updated,
+	  	    	  		  	email,
+	  	    	  		  	status,
+	  	    	  		  	username
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoUsersExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_users
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_users
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_users
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoUsers" >
+    insert into mto_users (
+    	    		  	comments,
+		  	    	    		  	gender,
+		  	    	    		  	signature,
+		  	    	    		  	created,
+		  	    	    		  	last_login,
+		  	    	    		  	mobile,
+		  	    	    		  	follows,
+		  	    	    		  	favors,
+		  	    	    		  	avatar,
+		  	    	    		  	source,
+		  	    	    		  	posts,
+		  	    	    		  	fans,
+		  	    	    		  	password,
+		  	    	    		  	role_id,
+		  	    	    		  	name,
+		  	    	    		  	id,
+		  	    	    		  	active_email,
+		  	    	    		  	updated,
+		  	    	    		  	email,
+		  	    	    		  	status,
+		  	    	    		  	username
+	  	          )
+    values (
+     	        		#{comments,jdbcType=INT},
+    	    	        		#{gender,jdbcType=INT},
+    	    	        		#{signature,jdbcType=VARCHAR},
+    	    	        		#{created,jdbcType=DATETIME},
+    	    	        		#{lastLogin,jdbcType=DATETIME},
+    	    	        		#{mobile,jdbcType=VARCHAR},
+    	    	        		#{follows,jdbcType=INT},
+    	    	        		#{favors,jdbcType=INT},
+    	    	        		#{avatar,jdbcType=VARCHAR},
+    	    	        		#{source,jdbcType=INT},
+    	    	        		#{posts,jdbcType=INT},
+    	    	        		#{fans,jdbcType=INT},
+    	    	        		#{password,jdbcType=VARCHAR},
+    	    	        		#{roleId,jdbcType=INT},
+    	    	        		#{name,jdbcType=VARCHAR},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{activeEmail,jdbcType=INT},
+    	    	        		#{updated,jdbcType=DATETIME},
+    	    	        		#{email,jdbcType=VARCHAR},
+    	    	        		#{status,jdbcType=INT},
+    	    	        		#{username,jdbcType=VARCHAR}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoUsers" >
+    insert into mto_users
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="comments != null" >
+        comments,
+      </if>
+            <if test="gender != null" >
+        gender,
+      </if>
+            <if test="signature != null" >
+        signature,
+      </if>
+            <if test="created != null" >
+        created,
+      </if>
+            <if test="lastLogin != null" >
+        last_login,
+      </if>
+            <if test="mobile != null" >
+        mobile,
+      </if>
+            <if test="follows != null" >
+        follows,
+      </if>
+            <if test="favors != null" >
+        favors,
+      </if>
+            <if test="avatar != null" >
+        avatar,
+      </if>
+            <if test="source != null" >
+        source,
+      </if>
+            <if test="posts != null" >
+        posts,
+      </if>
+            <if test="fans != null" >
+        fans,
+      </if>
+            <if test="password != null" >
+        password,
+      </if>
+            <if test="roleId != null" >
+        role_id,
+      </if>
+            <if test="name != null" >
+        name,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="activeEmail != null" >
+        active_email,
+      </if>
+            <if test="updated != null" >
+        updated,
+      </if>
+            <if test="email != null" >
+        email,
+      </if>
+            <if test="status != null" >
+        status,
+      </if>
+            <if test="username != null" >
+        username,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="comments != null" >
+        #{comments,jdbcType=INT},
+      </if>
+            <if test="gender != null" >
+        #{gender,jdbcType=INT},
+      </if>
+            <if test="signature != null" >
+        #{signature,jdbcType=VARCHAR},
+      </if>
+            <if test="created != null" >
+        #{created,jdbcType=DATETIME},
+      </if>
+            <if test="lastLogin != null" >
+        #{lastLogin,jdbcType=DATETIME},
+      </if>
+            <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+            <if test="follows != null" >
+        #{follows,jdbcType=INT},
+      </if>
+            <if test="favors != null" >
+        #{favors,jdbcType=INT},
+      </if>
+            <if test="avatar != null" >
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+            <if test="source != null" >
+        #{source,jdbcType=INT},
+      </if>
+            <if test="posts != null" >
+        #{posts,jdbcType=INT},
+      </if>
+            <if test="fans != null" >
+        #{fans,jdbcType=INT},
+      </if>
+            <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+            <if test="roleId != null" >
+        #{roleId,jdbcType=INT},
+      </if>
+            <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="activeEmail != null" >
+        #{activeEmail,jdbcType=INT},
+      </if>
+            <if test="updated != null" >
+        #{updated,jdbcType=DATETIME},
+      </if>
+            <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+            <if test="status != null" >
+        #{status,jdbcType=INT},
+      </if>
+            <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoUsersExample" resultType="java.lang.Integer" >
+    select count(*) from mto_users
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoUsers" >
+    update mto_users
+    <set >
+            <if test="comments != null" >
+         {comments = #{comments,jdbcType=INT},
+      </if>
+            <if test="gender != null" >
+         {gender = #{gender,jdbcType=INT},
+      </if>
+            <if test="signature != null" >
+         {signature = #{signature,jdbcType=VARCHAR},
+      </if>
+            <if test="created != null" >
+         {created = #{created,jdbcType=DATETIME},
+      </if>
+            <if test="lastLogin != null" >
+         {last_login = #{lastLogin,jdbcType=DATETIME},
+      </if>
+            <if test="mobile != null" >
+         {mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+            <if test="follows != null" >
+         {follows = #{follows,jdbcType=INT},
+      </if>
+            <if test="favors != null" >
+         {favors = #{favors,jdbcType=INT},
+      </if>
+            <if test="avatar != null" >
+         {avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+            <if test="source != null" >
+         {source = #{source,jdbcType=INT},
+      </if>
+            <if test="posts != null" >
+         {posts = #{posts,jdbcType=INT},
+      </if>
+            <if test="fans != null" >
+         {fans = #{fans,jdbcType=INT},
+      </if>
+            <if test="password != null" >
+         {password = #{password,jdbcType=VARCHAR},
+      </if>
+            <if test="roleId != null" >
+         {role_id = #{roleId,jdbcType=INT},
+      </if>
+            <if test="name != null" >
+         {name = #{name,jdbcType=VARCHAR},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="activeEmail != null" >
+         {active_email = #{activeEmail,jdbcType=INT},
+      </if>
+            <if test="updated != null" >
+         {updated = #{updated,jdbcType=DATETIME},
+      </if>
+            <if test="email != null" >
+         {email = #{email,jdbcType=VARCHAR},
+      </if>
+            <if test="status != null" >
+         {status = #{status,jdbcType=INT},
+      </if>
+            <if test="username != null" >
+         {username = #{username,jdbcType=VARCHAR},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoUsers" >
+    update mto_users
+    set 
+       	        		comments = #{comments,jdbcType=INT},
+    	    	        		gender = #{gender,jdbcType=INT},
+    	    	        		signature = #{signature,jdbcType=VARCHAR},
+    	    	        		created = #{created,jdbcType=DATETIME},
+    	    	        		last_login = #{lastLogin,jdbcType=DATETIME},
+    	    	        		mobile = #{mobile,jdbcType=VARCHAR},
+    	    	        		follows = #{follows,jdbcType=INT},
+    	    	        		favors = #{favors,jdbcType=INT},
+    	    	        		avatar = #{avatar,jdbcType=VARCHAR},
+    	    	        		source = #{source,jdbcType=INT},
+    	    	        		posts = #{posts,jdbcType=INT},
+    	    	        		fans = #{fans,jdbcType=INT},
+    	    	        		password = #{password,jdbcType=VARCHAR},
+    	    	        		role_id = #{roleId,jdbcType=INT},
+    	    	        		name = #{name,jdbcType=VARCHAR},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		active_email = #{activeEmail,jdbcType=INT},
+    	    	        		updated = #{updated,jdbcType=DATETIME},
+    	    	        		email = #{email,jdbcType=VARCHAR},
+    	    	        		status = #{status,jdbcType=INT},
+    	    	        		username = #{username,jdbcType=VARCHAR}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

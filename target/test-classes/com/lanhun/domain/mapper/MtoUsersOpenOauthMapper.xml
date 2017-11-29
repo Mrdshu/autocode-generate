@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanhun.domain.mapper.MtoUsersOpenOauthMapper" >
+  <resultMap id="BaseResultMap" type="com.lanhun.domain.model.MtoUsersOpenOauth" >	
+     	  	   	  	   	  	   	  	   	  	   	  	   	  	
+  	<id column="id" property="id" jdbcType="BIGINT" /> 
+  	   	   	  	   	
+   	   		<result column="access_token" property="accessToken" jdbcType="VARCHAR"  />
+	   	   		<result column="refresh_token" property="refreshToken" jdbcType="VARCHAR"  />
+	   	   		<result column="oauth_user_id" property="oauthUserId" jdbcType="VARCHAR"  />
+	   	   		<result column="user_id" property="userId" jdbcType="BIGINT"  />
+	   	   		<result column="oauth_code" property="oauthCode" jdbcType="VARCHAR"  />
+	   	   		<result column="oauth_type" property="oauthType" jdbcType="INT"  />
+	   	   	   	   		<result column="expire_in" property="expireIn" jdbcType="VARCHAR"  />
+	   	   	
+  </resultMap>
+ 
+  <sql id="Example_Where_Clause">
+		<where>
+				<foreach collection="oredCriteria" item="criteria" separator="or">
+					<if test="criteria.valid">
+						<trim prefix="(" suffix=")" prefixOverrides="and">
+							<foreach collection="criteria.criteria" item="criterion">
+								<choose>
+									<when test="criterion.noValue">
+										and ${criterion.condition}
+									</when>
+									<when test="criterion.singleValue">
+										and ${criterion.condition}
+										#{criterion.value}
+									</when>
+									<when test="criterion.betweenValue">
+										and ${criterion.condition}
+										#{criterion.value} and
+										#{criterion.secondValue}
+									</when>
+									<when test="criterion.listValue">
+										and ${criterion.condition}
+										<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+											#{listItem}
+										</foreach>
+									</when>
+									<when test="criterion.joinValue">
+										${criterion.condition}
+									</when>
+								</choose>
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+  		  		  	access_token,
+	  	    	  		  	refresh_token,
+	  	    	  		  	oauth_user_id,
+	  	    	  		  	user_id,
+	  	    	  		  	oauth_code,
+	  	    	  		  	oauth_type,
+	  	    	  		  	id,
+	  	    	  		  	expire_in
+	  	      </sql>
+  
+  <select id="selectByExample" resultType="HashMap" parameterType="com.lanhun.domain.example.MtoUsersOpenOauthExample">
+		select
+		
+		<include refid="Base_Column_List"/>
+
+		from mto_users_open_oauth
+
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mto_users_open_oauth
+    where id =#{${primaryProperty},jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mto_users_open_oauth
+    where id = #{primaryProperty,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanhun.domain.model.MtoUsersOpenOauth" >
+    insert into mto_users_open_oauth (
+    	    		  	access_token,
+		  	    	    		  	refresh_token,
+		  	    	    		  	oauth_user_id,
+		  	    	    		  	user_id,
+		  	    	    		  	oauth_code,
+		  	    	    		  	oauth_type,
+		  	    	    		  	id,
+		  	    	    		  	expire_in
+	  	          )
+    values (
+     	        		#{accessToken,jdbcType=VARCHAR},
+    	    	        		#{refreshToken,jdbcType=VARCHAR},
+    	    	        		#{oauthUserId,jdbcType=VARCHAR},
+    	    	        		#{userId,jdbcType=BIGINT},
+    	    	        		#{oauthCode,jdbcType=VARCHAR},
+    	    	        		#{oauthType,jdbcType=INT},
+    	    	        		#{id,jdbcType=BIGINT},
+    	    	        		#{expireIn,jdbcType=VARCHAR}
+    	          )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanhun.domain.model.MtoUsersOpenOauth" >
+    insert into mto_users_open_oauth
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="accessToken != null" >
+        access_token,
+      </if>
+            <if test="refreshToken != null" >
+        refresh_token,
+      </if>
+            <if test="oauthUserId != null" >
+        oauth_user_id,
+      </if>
+            <if test="userId != null" >
+        user_id,
+      </if>
+            <if test="oauthCode != null" >
+        oauth_code,
+      </if>
+            <if test="oauthType != null" >
+        oauth_type,
+      </if>
+            <if test="id != null" >
+        id,
+      </if>
+            <if test="expireIn != null" >
+        expire_in,
+      </if>
+          </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="accessToken != null" >
+        #{accessToken,jdbcType=VARCHAR},
+      </if>
+            <if test="refreshToken != null" >
+        #{refreshToken,jdbcType=VARCHAR},
+      </if>
+            <if test="oauthUserId != null" >
+        #{oauthUserId,jdbcType=VARCHAR},
+      </if>
+            <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+            <if test="oauthCode != null" >
+        #{oauthCode,jdbcType=VARCHAR},
+      </if>
+            <if test="oauthType != null" >
+        #{oauthType,jdbcType=INT},
+      </if>
+            <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+            <if test="expireIn != null" >
+        #{expireIn,jdbcType=VARCHAR},
+      </if>
+          </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanhun.domain.example.MtoUsersOpenOauthExample" resultType="java.lang.Integer" >
+    select count(*) from mto_users_open_oauth
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanhun.domain.model.MtoUsersOpenOauth" >
+    update mto_users_open_oauth
+    <set >
+            <if test="accessToken != null" >
+         {access_token = #{accessToken,jdbcType=VARCHAR},
+      </if>
+            <if test="refreshToken != null" >
+         {refresh_token = #{refreshToken,jdbcType=VARCHAR},
+      </if>
+            <if test="oauthUserId != null" >
+         {oauth_user_id = #{oauthUserId,jdbcType=VARCHAR},
+      </if>
+            <if test="userId != null" >
+         {user_id = #{userId,jdbcType=BIGINT},
+      </if>
+            <if test="oauthCode != null" >
+         {oauth_code = #{oauthCode,jdbcType=VARCHAR},
+      </if>
+            <if test="oauthType != null" >
+         {oauth_type = #{oauthType,jdbcType=INT},
+      </if>
+            <if test="id != null" >
+         {id = #{id,jdbcType=BIGINT},
+      </if>
+            <if test="expireIn != null" >
+         {expire_in = #{expireIn,jdbcType=VARCHAR},
+      </if>
+          </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 
+  <update id="updateByPrimaryKey" parameterType="com.lanhun.domain.model.MtoUsersOpenOauth" >
+    update mto_users_open_oauth
+    set 
+       	        		access_token = #{accessToken,jdbcType=VARCHAR},
+    	    	        		refresh_token = #{refreshToken,jdbcType=VARCHAR},
+    	    	        		oauth_user_id = #{oauthUserId,jdbcType=VARCHAR},
+    	    	        		user_id = #{userId,jdbcType=BIGINT},
+    	    	        		oauth_code = #{oauthCode,jdbcType=VARCHAR},
+    	    	        		oauth_type = #{oauthType,jdbcType=INT},
+    	    	        		id = #{id,jdbcType=BIGINT},
+    	    	        		expire_in = #{expireIn,jdbcType=VARCHAR}
+  	  	        where id = #{${primaryProperty},jdbcType=INTEGER}
+  </update>
+</mapper>

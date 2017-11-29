@@ -1,0 +1,40 @@
+package ${controllerPackage};
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import ${modelPackage}.${beanName};
+import ${modelPackage}.ResponseResult;
+import ${servicePackage}.BaseService;
+import ${servicePackage}.${beanName}Service;
+
+/**
+ * <p>
+ * ${remark}controller层
+ * </p>
+ * 
+ * @author wangsz
+ * @date ${dateTime}
+ */
+@Controller
+@RequestMapping("/${beanName.substring(0, 1).toLowerCase()}${beanName.substring(1)}")
+public class ${beanName}Controller extends BaseController<${beanName}>{
+
+	@Autowired
+	private ${beanName}Service baseService;
+	
+	@Override
+	protected BaseService<${beanName}> getSevice() {
+		return baseService;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void afterReturn(ResponseResult result) {
+		
+	}
+	
+
+
+}

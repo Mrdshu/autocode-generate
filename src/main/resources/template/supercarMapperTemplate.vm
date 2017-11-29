@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="${modelPackage}.${beanName}" >
+  <resultMap id="resultMap" type="${modelPackage}.${beanName}" >
+	<id property="id" column="ID" />
+	#foreach ( $item in ${columns})#if ( $item.column.toLowerCase() != $primaryKey )
+<result column="${item.column.toUpperCase()}" property="${item.lowerProperty}" />
+#end
+	#end
+   	
+  </resultMap>
+  
+  <sql id="table">${tableName}</sql>
+  <sql id="columns">ID,#foreach( $item in ${columns})#if (${velocityCount} < ${columns.size()}) ${item.column.toUpperCase()},#else ${item.column.toUpperCase()}#end#end</sql>
+  
+  	<!-- 新增 -->
+	<insert id="insert">
+		INSERT INTO <include refid="table" /> (
+			<include refid="columns" />
+		) VALUES (
+			<trim suffixOverrides=",">
+				<choose><when test="id == ''">null</when><otherwise>#{id}</otherwise></choose>,
+				#foreach ( $item in ${columns})
+#if( $item.lowerProperty == "createTime" || $item.lowerProperty == "updateTime" || $item.lowerProperty == "isDeleted")default,
+				#else <choose><when test="${item.lowerProperty} == ''">null</when><otherwise>#{${item.lowerProperty}}</otherwise></choose>,
+#end
+				#end
+				
+			</trim>
+		)
+	</insert>
+	
+	<!-- 批量新增 -->
+	<insert id="insertList" useGeneratedKeys="true" parameterType="java.util.List">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO <include refid="table" /> (
+			<include refid="columns" />
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id},#foreach( $item in ${columns})#if (${velocityCount} < ${columns.size()}) #{item.${item.lowerProperty}},#else #{item.${item.lowerProperty}}#end#end)
+		</foreach>
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update" >
+		UPDATE <include refid="table" /> SET <include refid="set" />
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 批量修改 -->
+	<update id="updateBy" >
+		UPDATE <include refid="table" /> SET <include refid="set" />
+		<include refid="whereFilter"/>
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="delete">
+		DELETE FROM <include refid="table" /> 
+		WHERE ID = #{id}
+	</delete>
+	
+	<!-- 条件搜索删除 -->
+	<delete id="deleteBy">
+		DELETE FROM <include refid="table" /> 
+		<include refid="where"/>
+	</delete>
+	
+	<!-- 查询 -->
+	<select id="selectBy" resultMap="resultMap">
+		SELECT * from  <include refid="table" />
+		<include refid="where"/> <include refid="sort" />
+	</select>
+	
+	<!-- 计数 -->
+	<select id="countBy" resultType="long">
+		SELECT count(ID) FROM <include refid="table" />
+		<include refid="where" />
+	</select>
+	
+	<!-- 修改时用的的set语句 -->
+	<sql id="set">
+		<trim suffixOverrides=",">
+#foreach ( $item in ${columns})#if ( $item.column.toLowerCase() != $primaryKey && $item.lowerProperty != "updateTime" && $item.lowerProperty != "createTime")
+			<if test="${item.lowerProperty} != null">${item.column.toUpperCase()} = <choose><when test="${item.lowerProperty} == ''">null</when><otherwise>#{${item.lowerProperty}}</otherwise></choose>,</if>
+#end
+#end
+
+		</trim>
+	</sql>
+	
+	<!-- where语句（对应entity中的属性）-->
+	<sql id="whereEntity">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="id != null">AND ID = #{id}</if>
+#foreach ( $item in ${columns})#if ( $item.column.toLowerCase() != $primaryKey && $item.lowerProperty != "updateTime" && $item.lowerProperty != "createTime")
+			<if test="${item.lowerProperty} != null">AND ${item.column.toUpperCase()} = #{${item.lowerProperty}}</if>
+#end
+#end
+
+		</trim>
+	</sql>
+	<!-- where语句（对应Searchable）-->
+	<sql id="whereFilter">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="filter.id_eq != null">AND ID = #{filter.id_eq}</if>
+			<if test="filter.id_ne != null">AND ID != #{filter.id_ne}</if>
+			<if test="filter.id_in != null">AND <foreach item="ii" collection="filter.id_in" open="(" separator=" OR " close=")">ID in <foreach item="i" collection="ii" open="(" separator="," close=")">#{i}</foreach></foreach></if>
+			<if test="filter.id_notIn != null">AND <foreach item="ii" collection="filter.id_notIn" open="(" separator=" AND " close=")">ID not in <foreach item="i" collection="ii" open="(" separator="," close=")">#{i}</foreach></foreach></if>
+
+#foreach ( $item in ${columns})#if ( !$item.lowerProperty.toLowerCase().contains("time"))
+			<if test="filter.${item.lowerProperty}_eq != null">AND ${item.column.toUpperCase()} = #{filter.${item.lowerProperty}_eq}</if>
+			<if test="filter.${item.lowerProperty}_ne != null">AND ${item.column.toUpperCase()} != #{filter.${item.lowerProperty}_ne}</if>
+			<if test="filter.${item.lowerProperty}_like != null">AND lower(${item.column.toUpperCase()}) LIKE lower(#{filter.${item.lowerProperty}_like})</if>
+			<if test="filter.${item.lowerProperty}_in != null">AND <foreach item="ii" collection="filter.${item.lowerProperty}_in" open="(" separator=" OR " close=")">${item.column.toUpperCase()} in <foreach item="i" collection="ii" open="(" separator="," close=")">#{i}</foreach></foreach></if>
+			<if test="filter.${item.lowerProperty}_notIn != null">AND <foreach item="ii" collection="filter.${item.lowerProperty}_notIn" open="(" separator=" AND " close=")">${item.column.toUpperCase()} not in <foreach item="i" collection="ii" open="(" separator="," close=")">#{i}</foreach></foreach></if>
+#else
+			<if test="filter.${item.lowerProperty}_gte != null">AND ${item.column.toUpperCase()} &gt;= #{filter.${item.lowerProperty}_gte}</if>
+			<if test="filter.${item.lowerProperty}_lte != null">AND ${item.column.toUpperCase()} &lt;= #{filter.${item.lowerProperty}_lte}</if>
+			<if test="filter.${item.lowerProperty}_gt != null">AND ${item.column.toUpperCase()} &gt;= #{filter.${item.lowerProperty}_gt}</if>
+			<if test="filter.${item.lowerProperty}_lt != null">AND ${item.column.toUpperCase()} &lt;= #{filter.${item.lowerProperty}_lt}</if>
+#end
+
+#end
+				
+		</trim>
+	</sql>
+	
+	<!-- where语句-->
+	<sql id="where">
+		<trim prefix="WHERE " prefixOverrides="AND |OR ">
+			<trim prefixOverrides="WHERE ">
+				<include refid="whereEntity" />
+			</trim>
+			<trim prefix="AND " prefixOverrides="WHERE ">
+				<include refid="whereFilter" />
+			</trim>
+		</trim>
+	</sql>
+	
+	<!-- sort排序语句-->
+	<sql id="sort">
+		<if test="sort == null" >
+			#foreach ( $item in ${columns})
+#if ( $item.lowerProperty == "createTime")
+			ORDER BY CREATE_TIME DESC
+#end
+			#end
+		</if>
+		<if test="sort != null" >
+			<trim prefix="ORDER BY " suffixOverrides=",">
+				<foreach collection="sort" index="key" item="val">
+				</foreach>
+			</trim>
+		</if>
+	</sql>
+</mapper>
