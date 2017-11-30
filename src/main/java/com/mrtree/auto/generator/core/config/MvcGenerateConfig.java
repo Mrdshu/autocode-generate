@@ -1,9 +1,10 @@
-package com.mrtree.auto.generator.core;
+package com.mrtree.auto.generator.core.config;
 
 import java.io.FileInputStream;
 import java.util.Properties;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * <p>
@@ -12,23 +13,20 @@ import lombok.Data;
  * @author shuzheng_wang  2017-11-29 17:46
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class MvcGenerateConfig extends GenerateConfig{
 	
 	public MvcGenerateConfig() {
+		//mvc默认采用generate-mvc.properties配置文件
+		super("src/main/resources/config/generate-mvc.properties");
 		loadConfig(configPath);
 	}
 	
 	public MvcGenerateConfig(String configPath) {
-		this.configPath = configPath;
+		super(configPath);
 		loadConfig(configPath);
 	}
-	
 
-	/**模板文件路径*/
-	public String templeteBase;
-	/**生成文件的目标路径*/
-	public String targetDir;
-	
 	/**model模板文件名*/
 	public String modelVM;
 	/**mapper模板文件名*/

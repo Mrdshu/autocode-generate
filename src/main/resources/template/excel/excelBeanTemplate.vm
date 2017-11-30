@@ -1,0 +1,46 @@
+package ${modelPackage};
+
+#if (${hasDate})
+import java.util.Date;
+#end
+#if (${hasBigdecimal})
+import java.math.BigDecimal;
+#end
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+
+/**
+ * <p>
+ *   ${beanRemark}
+ * </p>
+ * 
+ * @author shuzheng_wang
+ * @date ${dateTime}
+ */
+public class ${beanName} implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	#foreach ($item in $fields) 
+	
+	#if (${item.remark} && ${item.remark}!='' )
+   	/** ${item.remark} */
+    #end
+	private ${item.type} ${item.name};
+	#end
+	
+	#foreach ($item in $fields)
+	#set( $length=$item.name.length() )
+    #set( $str=$item.name.substring( 1 ,$length ) )
+    #set( $start = $item.name.substring(0,1).toUpperCase() )  
+    
+    public ${item.type} get$start$str() {
+        return ${item.name};
+    }
+    
+	public void set$start$str (${item.type} ${item.name}) {
+    	 this.${item.name} = ${item.name};
+	}
+	#end
+	
+}

@@ -1,2 +1,2 @@
 # autocode-generate
-自动生成代码神器
+自动生成代码

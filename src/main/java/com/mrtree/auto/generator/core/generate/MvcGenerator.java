@@ -1,26 +1,27 @@
-package com.mrtree.auto.generator.core;
+package com.mrtree.auto.generator.core.generate;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
+import com.mrtree.auto.generator.core.TableDataProcessor;
+import com.mrtree.auto.generator.core.VelocityContextHolder;
+import com.mrtree.auto.generator.core.config.MvcGenerateConfig;
 import com.mrtree.auto.generator.model.Table;
 import com.mrtree.auto.generator.utils.FileUtil;
 
-@SuppressWarnings({"rawtypes", "unchecked" })
-public class TableGenerator {
+public class MvcGenerator {
 
 	protected MvcGenerateConfig config;
 	
 	
-	public TableGenerator() {
+	public MvcGenerator() {
 		config = new MvcGenerateConfig();
 	}
 
-	public TableGenerator(MvcGenerateConfig config) {
+	public MvcGenerator(MvcGenerateConfig config) {
 		this.config = config;
 	}
 	/**
@@ -42,16 +43,10 @@ public class TableGenerator {
 		String path = config.getModelPackage().replace(".", "/") + "/" + table.getBeanName() + ".java";
 		Writer writer = FileUtil.createWriter(getRealPath(path));
 		velocityEngine.mergeTemplate(config.templeteBase + config.getModelVM(), "UTF-8", context, writer);
-		flushWriter(writer);
+		FileUtil.flushWriter(writer);;
 	}
 
-	private void flushWriter(Writer writer) {
-		try {
-			writer.flush();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	
 
 	public void generateMapper(Table table) {
 		VelocityEngine velocityEngine = VelocityContextHolder.getVelocityEngine();
@@ -62,7 +57,7 @@ public class TableGenerator {
 		Writer writer = FileUtil.createWriter(getRealPath(path));
 
 		velocityEngine.mergeTemplate(config.templeteBase + config.getMapperVM(), "UTF-8", context, writer);
-		flushWriter(writer);
+		FileUtil.flushWriter(writer);
 
 	}
 
@@ -73,7 +68,7 @@ public class TableGenerator {
 		String path = config.getDaoPackage().replace(".", "/") + "/" + table.getBeanName() + "Dao.java";
 		Writer writer = FileUtil.createWriter(getRealPath(path));
 		velocityEngine.mergeTemplate(config.templeteBase + config.getDaoVM(), "UTF-8",context, writer);
-		flushWriter(writer);
+		FileUtil.flushWriter(writer);
 	}
 	
 	public void generateService(Table table) {
@@ -82,7 +77,7 @@ public class TableGenerator {
 		String path = config.getServicePackage().replace(".", "/") + "/" + table.getBeanName() + "Service.java";
 		Writer writer = FileUtil.createWriter(getRealPath(path));
 		velocityEngine.mergeTemplate(config.templeteBase + config.getServiceVM(),"UTF-8", context, writer);
-		flushWriter(writer);
+		FileUtil.flushWriter(writer);
 	}
 	
 	public void generateController(Table table) {
@@ -92,7 +87,7 @@ public class TableGenerator {
 		String path = config.getControllerPackage().replace(".", "/") + "/" + table.getBeanName() + "Controller.java";
 		Writer writer = FileUtil.createWriter(getRealPath(path));
 		velocityEngine.mergeTemplate(config.templeteBase + config.getControllerVM(), "UTF-8",context, writer);
-		flushWriter(writer);
+		FileUtil.flushWriter(writer);
 	}
 
 	private String getRealPath(String path) {
@@ -112,7 +107,7 @@ public class TableGenerator {
 	public void generate() {
 		//根据配置生成TableGenerator
 		MvcGenerateConfig config = new MvcGenerateConfig();
-		TableGenerator generator = new TableGenerator(config);
+		MvcGenerator generator = new MvcGenerator(config);
 		String tableNamePattern = config.getTableNamePattern();
 		//获取表信息
 		TableDataProcessor t = new TableDataProcessor();
