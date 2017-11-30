@@ -2,7 +2,9 @@ package com.mrtree.auto.generator.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 public class FileUtil {
 	
@@ -25,6 +27,22 @@ public class FileUtil {
 
 		return str;
 
+	}
+	
+	public static Writer createWriter(String path) {		
+		File file = new File(path);
+		String dir = file.getParent();
+		File pd = new File(dir);
+		if (!pd.exists()) {
+			pd.mkdirs();
+		}
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter(path);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return writer;
 	}
 
 }

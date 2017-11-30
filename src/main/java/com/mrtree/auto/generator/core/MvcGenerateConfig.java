@@ -12,9 +12,7 @@ import lombok.Data;
  * @author shuzheng_wang  2017-11-29 17:46
  */
 @Data
-public class MvcGenerateConfig {
-	/**配置文件路径，默认是resource中的generate.properties*/
-	public String configPath = "src/main/resources/config/generate.properties";
+public class MvcGenerateConfig extends GenerateConfig{
 	
 	public MvcGenerateConfig() {
 		loadConfig(configPath);
@@ -28,6 +26,9 @@ public class MvcGenerateConfig {
 
 	/**模板文件路径*/
 	public String templeteBase;
+	/**生成文件的目标路径*/
+	public String targetDir;
+	
 	/**model模板文件名*/
 	public String modelVM;
 	/**mapper模板文件名*/
@@ -39,8 +40,6 @@ public class MvcGenerateConfig {
 	/**controller模板文件名*/
 	public String controllerVM;
 
-	/**生成文件的目标路径*/
-	public String targetDir;
 	/**生成mapper文件的目标路径*/
 	public String targetResourceDir;
 	/**model的包名*/
@@ -54,12 +53,6 @@ public class MvcGenerateConfig {
 	/**controller的包名*/
 	public String controllerPackage;
 
-	public String primaryKey;
-	/**匹配的表名，%为全匹配*/
-	public String tableNamePattern;
-	
-	
-	
 	public void loadConfig(String filePath) {
 		Properties properties = new Properties(); 
 		try {
