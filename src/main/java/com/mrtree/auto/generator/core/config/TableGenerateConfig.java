@@ -8,21 +8,21 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- *   mvc模式的配置类
+ *   数据源为表的配置类
  * </p>
  * @author shuzheng_wang  2017-11-29 17:46
  */
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class MvcGenerateConfig extends GenerateConfig{
+public class TableGenerateConfig extends GenerateConfig{
 	
-	public MvcGenerateConfig() {
+	public TableGenerateConfig() {
 		//mvc默认采用generate-mvc.properties配置文件
-		super("src/main/resources/config/generate-mvc.properties");
+		super("src/main/resources/config/generate-table.properties");
 		loadConfig(configPath);
 	}
 	
-	public MvcGenerateConfig(String configPath) {
+	public TableGenerateConfig(String configPath) {
 		super(configPath);
 		loadConfig(configPath);
 	}
@@ -50,6 +50,9 @@ public class MvcGenerateConfig extends GenerateConfig{
 	public String servicePackage;
 	/**controller的包名*/
 	public String controllerPackage;
+	
+	/**匹配的表名，%为全匹配*/
+	public String tableNamePattern;
 
 	public void loadConfig(String filePath) {
 		Properties properties = new Properties(); 

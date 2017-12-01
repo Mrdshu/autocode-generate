@@ -1,4 +1,4 @@
-package ${modelPackage};
+package ${packageName};
 
 #if (${hasDate})
 import java.util.Date;

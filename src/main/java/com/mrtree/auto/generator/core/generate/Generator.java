@@ -4,19 +4,19 @@ import java.util.List;
 
 import com.mrtree.auto.generator.core.TableDataProcessor;
 import com.mrtree.auto.generator.core.config.GenerateConfig;
-import com.mrtree.auto.generator.core.config.MvcGenerateConfig;
+import com.mrtree.auto.generator.core.config.TableGenerateConfig;
 import com.mrtree.auto.generator.model.Table;
 
-public class CommonGenerator {
+public class Generator {
 
 	protected GenerateConfig config;
 	
 	
-	public CommonGenerator() {
-		config = new MvcGenerateConfig();
+	public Generator() {
+		config = new TableGenerateConfig();
 	}
 
-	public CommonGenerator(MvcGenerateConfig config) {
+	public Generator(TableGenerateConfig config) {
 		this.config = config;
 	}
 	/**
@@ -41,13 +41,20 @@ public class CommonGenerator {
 
 	}
 
+	/**
+	 * 返回真正的路径。用于子类对路径做处理返回
+	 * @param path
+	 * @return
+	 *
+	 * @author wsz 2017-12-01
+	 */
 	protected String getRealPath(String path) {
 		return path;
 	}
 
 	public static void main(String[] args) {
-		MvcGenerateConfig config = new MvcGenerateConfig();
-		CommonGenerator generator = new CommonGenerator(config);
+		TableGenerateConfig config = new TableGenerateConfig();
+		Generator generator = new Generator(config);
 		
 		String tableNamePattern = config.getTableNamePattern();
 

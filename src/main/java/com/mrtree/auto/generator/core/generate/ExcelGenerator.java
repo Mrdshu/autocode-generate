@@ -13,6 +13,7 @@ import com.mrtree.auto.generator.excel.IExcelImport;
 import com.mrtree.auto.generator.model.ExcelBean;
 import com.mrtree.auto.generator.utils.BeanUtils;
 import com.mrtree.auto.generator.utils.FileUtil;
+import com.mrtree.auto.generator.utils.StringUtils;
 
 /**
  * <p>
@@ -20,26 +21,27 @@ import com.mrtree.auto.generator.utils.FileUtil;
  * </p>
  * @author shuzheng_wang  2017-11-30 14:01
  */
-public class ExcelGenerator extends CommonGenerator{
+public class ExcelGenerator extends Generator{
 	
-	public void generate(ExcelBean excelBean) {
-		VelocityEngine velocityEngine = VelocityContextHolder.getVelocityEngine();
+	public void generateForExcel(ExcelBean excelBean) {
+		if(StringUtils.isEmpty(config.getPackageName()) || StringUtils.isEmpty(config.getTargetDir())) {
+			System.out.println("包名或路径不能为空，生成模板代码失败！");
+			return ;
+		}
+		
+		String templatePath = config.getTempleteBase() + "/" + config.getTempleteName();
+		String path = config.getTargetDir() + config.getPackageName().toString().replace(".", "/")  +
+				"/" + excelBean.getBeanName().trim() + ".java";
+		Writer writer = FileUtil.createWriter(path);
 		Map<String, Object> map = BeanUtils.getValueMap(excelBean);
-		map.put("modelPackage", "com.feidee.loanmanage.service.entity.apidata");
-
-		String path = "D:\\WorkSpace\\java\\loanmanage-service\\loanmanage-service-entity\\src\\main\\java\\"+
-		map.get("modelPackage").toString().replace(".", "/")  +
-		"/" + excelBean.getBeanName().trim() + ".java";
-		System.out.println(path);
-		String templatePath = "/template/excel/excelBeanTemplate.vm";
-		Writer writer = FileUtil.createWriter(getRealPath(path));
-
 		VelocityContext context = VelocityContextHolder.createContext(map);
+		
+		VelocityEngine velocityEngine = VelocityContextHolder.getVelocityEngine();
 		velocityEngine.mergeTemplate(templatePath, "UTF-8", context, writer);
 		FileUtil.flushWriter(writer);
 	}
 	
-	public static void main(String[] args) {
+	public void generate() {
 		ExcelGenerator excelGenerator = new ExcelGenerator();
 		IExcelImport excelImport = new BeanImport();
 //		ExcelBean excelBean = excelImport.imports("E:\\test\\bean信息模板.xlsx");
@@ -47,7 +49,7 @@ public class ExcelGenerator extends CommonGenerator{
 		
 		List<ExcelBean> excelBeans = excelImport.importsMul("E:\\test\\bean信息模板-推送.xlsx");
 		for (ExcelBean excelBean : excelBeans) {
-			excelGenerator.generate(excelBean);
+			excelGenerator.generateForExcel(excelBean);
 		}
 		System.out.println("=============生成模板成功！=============");
 	}

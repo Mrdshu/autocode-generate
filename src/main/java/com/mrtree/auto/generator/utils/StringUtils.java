@@ -3,7 +3,7 @@ package com.mrtree.auto.generator.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringUtils {
+public class StringUtils extends org.apache.commons.lang.StringUtils{
 	
 	/**
 	 * 首字符转大写

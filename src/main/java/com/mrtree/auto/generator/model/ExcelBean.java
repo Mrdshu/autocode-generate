@@ -2,6 +2,8 @@ package com.mrtree.auto.generator.model;
 
 import java.util.List;
 
+import com.mrtree.auto.generator.utils.StringUtils;
+
 import lombok.Data;
 
 /**
@@ -20,6 +22,11 @@ public class ExcelBean {
 	private List<ExcelBeanField> fields;
 	
 	public String getBeanName(){
-		return beanName.substring(0,1).toUpperCase()+beanName.substring(1,beanName.length());
+		if(StringUtils.isEmpty(beanName))
+			return "";
+		//将类名设置为首字母大写
+		String index = beanName.substring(0,1).toUpperCase();
+		String str = beanName.substring(1,beanName.length());
+		return index + str;
 	}
 }
