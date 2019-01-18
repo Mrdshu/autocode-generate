@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import com.mrtree.auto.generator.model.ExcelBean;
-import com.mrtree.auto.generator.model.ExcelBeanField;
+import com.mrtree.auto.generator.model.ExcelField;
 
 
 /**
@@ -19,7 +19,7 @@ import com.mrtree.auto.generator.model.ExcelBeanField;
  * </p>
  * @author shuzheng_wang  2017-11-30 10:27
  */
-public class BeanImport extends IExcelImport{
+public class BeanImport extends IExcelImport<ExcelBean>{
 
 	@Override
 	protected ExcelBean importData(Sheet sheet) {
@@ -73,7 +73,7 @@ public class BeanImport extends IExcelImport{
 	protected ExcelBean importDataForLineNum(Sheet sheet, int startLine, int endLine) {
 		ExcelBean rs = new ExcelBean();
 		
-		List<ExcelBeanField> excelBeanFields = new ArrayList<>();
+		List<ExcelField> excelBeanFields = new ArrayList<>();
 		//获取类名和类备注
 		Row headRow = sheet.getRow(startLine);
 		rs.setBeanName((String)getCellValue(headRow.getCell(3)));
@@ -81,7 +81,7 @@ public class BeanImport extends IExcelImport{
 		
         for (int i = startLine, n = endLine; i <= n; i++) {
             Row row = sheet.getRow(i);
-            ExcelBeanField excelBeanField = new ExcelBeanField();
+            ExcelField excelBeanField = new ExcelField();
             
             excelBeanField.setName((String)getCellValue(row.getCell(0)));
             excelBeanField.setType((String)getCellValue(row.getCell(1)));
@@ -95,10 +95,5 @@ public class BeanImport extends IExcelImport{
 		return rs;
 	}
 
-	
-	public static void main(String[] args) {
-		IExcelImport excelImport = new BeanImport();
-		ExcelBean excelBean = excelImport.imports("E:\\test\\bean信息模板.xlsx");
-		System.out.println(excelBean);
-	}
+
 }

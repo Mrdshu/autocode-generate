@@ -12,20 +12,20 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import com.mrtree.auto.generator.model.ExcelBean;
 
 /**
  * Excel 导入接口
  * @author wsz 2017-07-30
  */
-public abstract class IExcelImport {
+public abstract class IExcelImport<T> {
 	protected final Logger log = Logger.getLogger(this.getClass());
 	 /**
 	 * 导入excel信息
 	 * @author wsz 2017-07-30
 	 */
-	public ExcelBean imports(String importFilePath) {
-		ExcelBean rs = null;
+	public T imports(String importFilePath) {
+	
+		T rs = null;
          
 		// 创建工作薄Workbook  
         Workbook workBook = null;
@@ -50,8 +50,8 @@ public abstract class IExcelImport {
         return rs;
 	}
 	
-	public List<ExcelBean> importsMul(String importFilePath) {
-		List<ExcelBean> excelBeans = null;
+	public List<T> importsMul(String importFilePath) {
+		List<T> excelBeans = null;
          
 		// 创建工作薄Workbook  
         Workbook workBook = null;
@@ -83,7 +83,7 @@ public abstract class IExcelImport {
 	 *
 	 * @author wsz 2017-09-20
 	 */
-	protected abstract ExcelBean importData(Sheet sheet);
+	protected abstract T importData(Sheet sheet);
 	
 	/**
 	 * 导入表格的多个数据
@@ -92,7 +92,7 @@ public abstract class IExcelImport {
 	 *
 	 * @author wsz 2017-09-20
 	 */
-	protected abstract List<ExcelBean> importDatas(Sheet sheet);
+	protected abstract List<T> importDatas(Sheet sheet);
 	
 	/**
 	 * 根据excel单元格的数据类型，获取相应的数据
@@ -102,6 +102,9 @@ public abstract class IExcelImport {
 	 * @author wsz 2017-09-20
 	 */
 	protected Object getCellValue(Cell cell) {
+		if(cell == null) {
+			return "";
+		}
 		if(CellType.NUMERIC == cell.getCellTypeEnum())
 			return cell.getNumericCellValue()+"";
 		else if(CellType.STRING == cell.getCellTypeEnum())

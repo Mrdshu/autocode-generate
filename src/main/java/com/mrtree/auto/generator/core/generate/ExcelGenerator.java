@@ -1,6 +1,7 @@
 package com.mrtree.auto.generator.core.generate;
 
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import com.mrtree.auto.generator.core.VelocityContextHolder;
 import com.mrtree.auto.generator.excel.BeanImport;
 import com.mrtree.auto.generator.excel.IExcelImport;
 import com.mrtree.auto.generator.model.ExcelBean;
+import com.mrtree.auto.generator.model.ExcelStruct;
 import com.mrtree.auto.generator.utils.BeanUtils;
 import com.mrtree.auto.generator.utils.FileUtil;
 import com.mrtree.auto.generator.utils.StringUtils;
@@ -41,16 +43,20 @@ public class ExcelGenerator extends Generator{
 		FileUtil.flushWriter(writer);
 	}
 	
-	public void generate() {
-		ExcelGenerator excelGenerator = new ExcelGenerator();
-		IExcelImport excelImport = new BeanImport();
-//		ExcelBean excelBean = excelImport.imports("E:\\test\\bean信息模板.xlsx");
-//		new ExcelGenerator().generate(excelBean);
-		
-		List<ExcelBean> excelBeans = excelImport.importsMul("E:\\test\\bean信息模板-推送.xlsx");
-		for (ExcelBean excelBean : excelBeans) {
-			excelGenerator.generateForExcel(excelBean);
+	public void generateStructsForExcel(List<ExcelStruct> excelStructs, String templatePath, String outFilePath) {
+		if(StringUtils.isEmpty(templatePath) || StringUtils.isEmpty(outFilePath)) {
+			System.out.println("包名或路径不能为空，生成模板代码失败！");
+			return ;
 		}
-		System.out.println("=============生成模板成功！=============");
+		
+		Writer writer = FileUtil.createWriter(outFilePath);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("types", excelStructs);
+		VelocityContext context = VelocityContextHolder.createContext(map);
+		
+		VelocityEngine velocityEngine = VelocityContextHolder.getVelocityEngine();
+		velocityEngine.mergeTemplate(templatePath, "UTF-8", context, writer);
+		FileUtil.flushWriter(writer);
 	}
+	
 }

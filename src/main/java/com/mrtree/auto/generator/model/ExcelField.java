@@ -9,7 +9,7 @@ import lombok.Data;
  * @author shuzheng_wang  2017-11-30 10:13
  */
 @Data
-public class ExcelBeanField {
+public class ExcelField {
 	/**字段名*/
 	private String name;
 	/**字段类型*/

@@ -1,0 +1,28 @@
+
+		
+    
+    type item.typeName struct{
+    	    	
+    	HasMsgRecord Boolean `json:"hasMsgRecord"`
+    	    	
+    	MsgNumLst3 int `json:"msgNumLst3"`
+    	    	
+    	MsgExceedOrgNumLst3 int `json:"msgExceedOrgNumLst3"`
+    	    	
+    	MsgExceedNumLst3 int `json:"msgExceedNumLst3"`
+    	    	
+    	MsgExceedMonthNumLst3 int `json:"msgExceedMonthNumLst3"`
+    	    }
+    
+
+		
+    
+    type item.typeName struct{
+    	    	
+    	Journey JourneySearchSpec `json:"journey"`
+    	    	
+    	Passengers PassengerSpec `json:"passengers"`
+    	    }
+    
+
+		
