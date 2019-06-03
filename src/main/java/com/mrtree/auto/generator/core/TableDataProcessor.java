@@ -313,12 +313,4 @@ public class TableDataProcessor {
 		}
 	}
 
-	public static void main(String[] args) {
-		String tableNamePattern = "%";
-		TableDataProcessor t = new TableDataProcessor();
-
-		List<Table> tableInfos = t.getTableInfos(tableNamePattern);
-
-		System.out.println(tableInfos.get(1));
-	}
 }

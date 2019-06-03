@@ -2,19 +2,30 @@ package com.mrtree.auto.generator;
 
 import java.util.List;
 
+import com.mrtree.auto.generator.core.TableDataProcessor;
 import com.mrtree.auto.generator.core.generate.ExcelGenerator;
 import com.mrtree.auto.generator.excel.BeanImport;
 import com.mrtree.auto.generator.excel.IExcelImport;
 import com.mrtree.auto.generator.excel.StructImport;
 import com.mrtree.auto.generator.model.ExcelBean;
 import com.mrtree.auto.generator.model.ExcelStruct;
+import com.mrtree.auto.generator.model.Table;
 
 public class Main {
 	
 	public static void main(String[] args) {
-		generateExcelStruct();
+		GetTableModel();
 	}
-	
+
+	public static void GetTableModel() {
+		String tableNamePattern = "user";
+		TableDataProcessor t = new TableDataProcessor();
+
+		List<Table> tableInfos = t.getTableInfos(tableNamePattern);
+
+		System.out.println(tableInfos.get(0));
+	}
+
 	public void generateExcelBean() {
 		ExcelGenerator excelGenerator = new ExcelGenerator();
 		IExcelImport excelImport = new BeanImport();
@@ -38,13 +49,6 @@ public class Main {
 	}
 
 	public static void generateGoDao() {
-		ExcelGenerator excelGenerator = new ExcelGenerator();
-		IExcelImport<ExcelStruct> excelImport = new StructImport();
 
-		List<ExcelStruct> excelStructs = excelImport.importsMul("/Users/shuzhengwang/Documents/excel-struct.xlsx");
-		excelGenerator.generateStructsForExcel(excelStructs,
-				"template/excel/excelStructTemplate.vm",
-				"/Users/shuzhengwang/a.txt");
-		System.out.println("=============生成模板成功！=============");
 	}
 }

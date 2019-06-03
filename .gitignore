@@ -1,5 +1,13 @@
-/target/
-.classpath
-.project
+/target
+/.settings
+/log
+/.classpath
+/.project
+**/test/
+**/bin/
+*.cmd
+rebel.xml
+.idea
 *.iml
-.settings
+**/class/
+*.class
