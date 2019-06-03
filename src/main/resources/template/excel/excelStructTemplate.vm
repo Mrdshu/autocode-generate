@@ -7,7 +7,6 @@
     	 #set( $length=$f.name.length() )
          #set( $str=$f.name.substring( 1 ,$length ) )
          #set( $start = $f.name.substring(0,1).toUpperCase() )  
-    	
     	$start$str $f.type `json:"$f.name"`
     	#end
     }

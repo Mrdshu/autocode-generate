@@ -1,0 +1,255 @@
+package product
+
+import (
+"fmt"
+"strings"
+
+"git.garena.com/shopee/integration-hub/app/common/protobuf"
+"git.garena.com/shopee/integration-hub/app/common/utils"
+"git.garena.com/shopee/integration-hub/app/productServer/app/model/db"
+
+"git.garena.com/shopee/digital-purchase/common/env"
+
+"git.garena.com/lixh/goorm"
+"github.com/golang/protobuf/proto"
+)
+
+const (
+merchantTable      = "merchant_tab"
+merchantNameLength = 64
+)
+
+func GetMerchant(id int64) (merchantModel *pb.MerchantModel, err error) {
+o := goorm.NewOrmWithFlag(db.ProductDBName, goorm.NoTrx_Slave)
+merchantModel = new(pb.MerchantModel)
+merchantModel.Id = proto.Int64(id)
+err = o.GetByWhere(merchantModel, merchantTable, "id")
+return
+}
+
+func InsertMerchant(merchant *pb.MerchantModel) (id int64, err error) {
+if merchant == nil {
+err = fmt.Errorf("merchant can't be empty when InsertMerchant")
+return
+}
+currentTime := utils.CurrentTimeStamp()
+merchant.CreateTime = proto.Int32(currentTime)
+merchant.UpdateTime = proto.Int32(currentTime)
+id, err = newDefaultProductOrm().Insert(merchant, goorm.InsertDupError, merchantTable)
+return
+}
+
+func BatchInsertMerchants(o *goorm.Orm, merchants []*pb.MerchantModel) (affectRows int64, err error) {
+if len(merchants) == 0 {
+return 0, fmt.Errorf("param is empty")
+}
+
+if o == nil {
+o = GetDefaultProductOrm()
+}
+currentTime := utils.CurrentTimeStamp()
+insertSql := " insert into `%s`(" +
+"`name`, `logo_url`, `description_pic_url`, `type`, `category_tag`, `phone`, `email`," +
+" `description`, `redeem_instruction`, `terms_and_condition`" +
+", `create_time`, `update_time`)  values "
+insertSql = fmt.Sprintf(insertSql, merchantTable)
+
+valuesArray := make([]string, len(merchants))
+args := make([]interface{}, 0)
+for i, merchant := range merchants {
+valuesArray[i] = utils.Placeholder(12)
+partArgs := []interface{}{
+merchant.GetName(), merchant.GetLogoUrl(), merchant.GetDescriptionPicUrl(), merchant.GetType(), merchant.GetCategoryTag(),
+merchant.GetPhone(), merchant.GetEmail(), merchant.GetDescription(), merchant.GetRedeemInstruction(), merchant.GetTermsAndCondition(), currentTime, currentTime}
+
+args = append(args, partArgs...)
+}
+valuesSql := strings.Join(valuesArray, ",")
+
+affectRows, _, err = o.ExecRaw(insertSql+valuesSql, args...)
+return
+}
+
+func DeleteMerchant(id int64) (err error) {
+if id < 1 {
+return fmt.Errorf("id can't be empty when DeleteMerchant")
+}
+
+deleteMerchant, _ := GetMerchant(id)
+if deleteMerchant == nil {
+return fmt.Errorf("id not exist")
+}
+// 为防止 软删除后的merchant name和新增的merchant name出现唯一索引冲突， 软删除时将name字段改为 d年月日时分秒/+name
+deleteName := "del" + utils.CurrentTimeString(utils.YYYYMMDDHHMMSS, env.Region()) + deleteMerchant.GetName()
+deleteName = utils.UTF8Substring(deleteName, merchantNameLength)
+
+args := new(utils.Args)
+sql := fmt.Sprintf("UPDATE `%s` SET status = ? ,name= ?, update_time = ? WHERE id = ?", merchantTable)
+args.Append(utils.SoftDeleteFlag).Append(deleteName).Append(utils.CurrentTimeStamp()).Append(id)
+_, _, err = newDefaultProductOrm().ExecRaw(sql, args.Values...)
+return
+}
+
+func PageMerchants(name, merchantType, categoryTag string, page, pageSize int32) (merchants []*pb.MerchantModel, err error) {
+wheres := " status != ? "
+
+args := utils.NewArgs(utils.SoftDeleteFlag)
+if name != "" {
+wheres += " AND name LIKE ? "
+args.Append(name + "%")
+}
+if merchantType != "" {
+wheres += " AND type = ? "
+args.Append(merchantType)
+}
+if categoryTag != "" {
+wheres += " AND category_tag = ? "
+args.Append(categoryTag)
+}
+
+limits := " ORDER BY id ASC LIMIT ?, ?;"
+args.Append((page - 1) * pageSize).Append(pageSize)
+wheres += limits
+
+result, err := newDefaultProductOrm().ReadByRawSql(&pb.MerchantModel{}, merchantTable, wheres, args.Values...)
+if err != nil {
+return
+}
+
+merchants = make([]*pb.MerchantModel, len(result))
+for i, v := range result {
+merchants[i] = v.(*pb.MerchantModel)
+}
+
+return
+}
+
+func GetMerchants(name, merchantType string, merchantIds []int64) (merchants []*pb.MerchantModel, err error) {
+wheres := " status != ? "
+
+args := utils.NewArgs(utils.SoftDeleteFlag)
+if len(merchantIds) > 0 {
+wheres += fmt.Sprintf(" AND id IN %s ", utils.Placeholder(len(merchantIds)))
+args = args.Append(merchantIds)
+}
+
+if name != "" && len(merchantIds) == 0 {
+wheres += " AND name LIKE ? "
+args.Append(name + "%")
+}
+if merchantType != "" && len(merchantIds) == 0 {
+wheres += " AND type = ? "
+args.Append(merchantType)
+}
+
+result, err := newDefaultProductOrm().ReadByRawSql(&pb.MerchantModel{}, merchantTable, wheres, args.Values...)
+if err != nil {
+return
+}
+
+merchants = make([]*pb.MerchantModel, len(result))
+for i, v := range result {
+merchants[i] = v.(*pb.MerchantModel)
+}
+
+return
+}
+
+func GetMerchantsByNames(o *goorm.Orm, names []string) (merchants []*pb.MerchantModel, err error) {
+length := len(names)
+if length == 0 {
+return
+}
+if o == nil {
+o = GetDefaultProductOrm()
+}
+
+wheres := fmt.Sprintf("status != ? and name IN %s;", utils.Placeholder(length))
+args := utils.NewArgs(utils.SoftDeleteFlag, names)
+result, err := o.ReadByRawSql(new(pb.MerchantModel), merchantTable, wheres, args.Values...)
+if err != nil {
+return
+}
+
+merchants = make([]*pb.MerchantModel, len(result))
+for i, row := range result {
+if m, ok := row.(*pb.MerchantModel); ok {
+merchants[i] = m
+}
+}
+
+return
+}
+
+func CountMerchants(name, merchantType, categoryTag string) (count int64, err error) {
+wheres := fmt.Sprintf(" status != %d ", utils.SoftDeleteFlag)
+
+if name != "" {
+wheres += fmt.Sprintf("AND name LIKE '%s' ", name+"%")
+}
+if merchantType != "" {
+wheres += fmt.Sprintf("AND type = '%s' ", merchantType)
+}
+if categoryTag != "" {
+wheres += fmt.Sprintf("AND category_tag = '%s' ", categoryTag)
+}
+count, err = newDefaultProductOrm().GetCount(merchantTable, wheres)
+return
+}
+
+func UpdateMerchant(merchant *pb.MerchantModel) (id int64, err error) {
+if merchant.GetId() <= 0 {
+return 0, fmt.Errorf("id can't be empty when UpdateMerchant")
+}
+currentTime := utils.CurrentTimeStamp()
+merchant.UpdateTime = proto.Int32(currentTime)
+id, err = newDefaultProductOrm().Update(merchant, merchantTable)
+return
+}
+
+// GetMerchantByProductVoucherId ...
+func GetMerchantByProductVoucherId(productVoucherId int64, cols string) (results [][]string, err error) {
+// use: select * from merchant_tab where id IN  (select merchant_id from product_voucher_tab where id = 116454)
+// to get merchant name with product voucher id
+dbName := db.ProductDBName
+flag := goorm.NoTrx_Slave
+o := goorm.NewOrmWithFlag(dbName, flag)
+
+where := fmt.Sprintf(" id IN (SELECT `merchant_id` FROM `product_voucher_tab` WHERE `id` = %d )", productVoucherId)
+
+results, err = o.GetByCol(merchantTable, where, cols, true)
+if err != nil {
+return
+}
+
+if len(results) == 0 {
+err = goorm.ErrNoRows
+return
+}
+
+return
+}
+
+// SearchMerchantByName ...
+func SearchMerchantByName(o *goorm.Orm, name string) (merchants []*pb.MerchantModel, err error) {
+if o == nil {
+dbName := db.ProductDBName
+flag := goorm.NoTrx_Slave
+o = goorm.NewOrmWithFlag(dbName, flag)
+}
+
+args := utils.NewArgs(name + "%")
+where := " `name` LIKE ? "
+
+results, err := o.ReadByRawSql(&pb.MerchantModel{}, merchantTable, where, args.Values...)
+if err != nil {
+return
+}
+
+merchants = make([]*pb.MerchantModel, 0)
+for _, r := range results {
+merchants = append(merchants, r.(*pb.MerchantModel))
+}
+
+return
+}

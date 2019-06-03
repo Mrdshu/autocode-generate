@@ -36,4 +36,15 @@ public class Main {
 				"/Users/shuzhengwang/a.txt");
 		System.out.println("=============生成模板成功！=============");
 	}
+
+	public static void generateGoDao() {
+		ExcelGenerator excelGenerator = new ExcelGenerator();
+		IExcelImport<ExcelStruct> excelImport = new StructImport();
+
+		List<ExcelStruct> excelStructs = excelImport.importsMul("/Users/shuzhengwang/Documents/excel-struct.xlsx");
+		excelGenerator.generateStructsForExcel(excelStructs,
+				"template/excel/excelStructTemplate.vm",
+				"/Users/shuzhengwang/a.txt");
+		System.out.println("=============生成模板成功！=============");
+	}
 }
