@@ -33,7 +33,7 @@ public class Generator {
 //
 //		VelocityContext context = VelocityContextHolder.createContext(table);
 //
-//		String path = config.getMapperPackage().replace(".", "/") + "/" + table.getBeanName() + "Mapper.xml";
+//		String path = config.getMapperPackage().replace(".", "/") + "/" + table.getRemovePrefixBeanName() + "Mapper.xml";
 //		Writer writer = FileUtil.createWriter(getRealPath(path));
 //
 //		velocityEngine.mergeTemplate(config.templeteBase + config.getMapperVM(), "UTF-8", context, writer);

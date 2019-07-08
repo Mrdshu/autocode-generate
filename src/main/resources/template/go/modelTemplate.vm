@@ -15,26 +15,25 @@ import (
 )
 
 const (
-merchantTable      = "merchant_tab"
-merchantNameLength = 64
+${lowBeanName}Table      = "${tableName}"
 )
 
-func GetMerchant(id int64) (merchantModel *pb.MerchantModel, err error) {
+func Get${beanName}(id int64) (${lowBeanName}Model *pb.${beanName}Model, err error) {
 o := goorm.NewOrmWithFlag(db.ProductDBName, goorm.NoTrx_Slave)
-merchantModel = new(pb.MerchantModel)
-merchantModel.Id = proto.Int64(id)
-err = o.GetByWhere(merchantModel, merchantTable, "id")
+${lowBeanName}Model = new(pb.${beanName}Model)
+${lowBeanName}Model.Id = proto.Int64(id)
+err = o.GetByWhere(${lowBeanName}Model, ${lowBeanName}Table, "id")
 return
 }
 
-func InsertMerchant(merchant *pb.MerchantModel) (id int64, err error) {
-if merchant == nil {
-err = fmt.Errorf("merchant can't be empty when InsertMerchant")
+func Insert${beanName}(${lowBeanName} *pb.${beanName}Model) (id int64, err error) {
+if ${lowBeanName} == nil {
+err = fmt.Errorf("${lowBeanName} can't be empty when Insert${beanName}")
 return
 }
 currentTime := utils.CurrentTimeStamp()
-merchant.CreateTime = proto.Int32(currentTime)
-merchant.UpdateTime = proto.Int32(currentTime)
+${lowBeanName}.CreateTime = proto.Int32(currentTime)
+${lowBeanName}.UpdateTime = proto.Int32(currentTime)
 id, err = newDefaultProductOrm().Insert(merchant, goorm.InsertDupError, merchantTable)
 return
 }

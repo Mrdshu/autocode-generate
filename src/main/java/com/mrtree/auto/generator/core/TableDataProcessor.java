@@ -33,7 +33,7 @@ import com.mrtree.auto.generator.utils.XmlTransferUtil;
 public class TableDataProcessor {
 	
 	private static Map<String, CustomTable> tablesMap = new HashMap<>();
-	private static Boolean needPrefix = false;
+	private static Boolean needPrefix = true;
 	private static HashSet<String> excludeColumnMap = new HashSet<>();
 	private static HashSet<String> specialColumnsSet = new HashSet<>();
 	
@@ -65,13 +65,27 @@ public class TableDataProcessor {
 	 * 表信息处理，将表信息转换为实体类
 	 * @param tableInfos
 	 */
-	public void prepareProcessTableInfos(List<Table> tableInfos) {
+	public void prepareProcessTableInfos(List<Table> tableInfos, String languageType) {
 		for (Table table : tableInfos) {
 			String tableName = table.getTableName();
-			String beanName = getBeanName(tableName);
-			table.setBeanName(beanName);
+			if ("go".equals(languageType)){
+				String beanName = getRemoveSuffixBeanName(tableName);
+				table.setBeanName(beanName);
+				String lowBeanName = beanName.substring(0,1).toLowerCase() + beanName.substring(1);
+				table.setLowBeanName(lowBeanName);
+			} else {
+				table.setBeanName(getRemovePrefixBeanName(tableName));
+			}
 			prepareProcessColumns(tableName, table.getColumns());
 		}
+	}
+
+	public List<Table> convertToTableInfos(Map<String, Map<String, Map<String, Object>>> tables) {
+		return convertToTableInfos(tables, "java");
+	}
+
+	public List<Table> convertToGoTableInfos(Map<String, Map<String, Map<String, Object>>> tables) {
+		return convertToTableInfos(tables, "go");
 	}
 
 	/**
@@ -79,7 +93,7 @@ public class TableDataProcessor {
 	 * @param tables
 	 * @autohr shuzheng_wang  2017-11-29 14:15
 	 */
-	public List<Table> convertToTableInfos(Map<String, Map<String, Map<String, Object>>> tables) {
+	public List<Table> convertToTableInfos(Map<String, Map<String, Map<String, Object>>> tables, String languageType ) {
 		List<Table> tableInfos = new ArrayList<Table>();
 		Table table = null;
 		Column column = null;
@@ -108,14 +122,14 @@ public class TableDataProcessor {
 				column.setJdbcType(jdbcType);
 				column.setRemark((String) rowInfo.get("remark"));
 				column.setDataType((int) rowInfo.get("dataType"));
-				
-				String javaType=TypeUtils.getJavaType(column.getDataType());
-				column.setType(javaType);
+
+				String type = TypeUtils.getType(column.getDataType(), languageType);
+				column.setType(type);
 				if("isdeleted".equals(column.getColumn().toLowerCase()))
 					table.setHasIsDeleted(true);
-				if("Date".equals(javaType)){
+				if("Date".equals(type)){
 					table.setHasDate(true);
-				}else if("BigDecimal".equals(javaType)){
+				}else if("BigDecimal".equals(type)){
 					table.setHasBigdecimal(true);
 				}
 				columns.add(column);
@@ -207,11 +221,15 @@ public class TableDataProcessor {
 	 * @autohr shuzheng_wang  2017-11-29 11:30
 	 */
 	public List<Table> getTableInfos(String tableNamePattern) {
+		return getTableInfos(tableNamePattern, "java");
+	}
+
+	public List<Table> getTableInfos(String tableNamePattern, String languageType) {
 		Map<String, Map<String, Map<String, Object>>> tables = getTableInfoMap(tableNamePattern);
 
-		List<Table> tableInfos = convertToTableInfos(tables);
+		List<Table> tableInfos = convertToTableInfos(tables, languageType);
 
-		prepareProcessTableInfos(tableInfos);
+		prepareProcessTableInfos(tableInfos,languageType);
 		return tableInfos;
 	}
 	
@@ -221,7 +239,7 @@ public class TableDataProcessor {
 	 * @return
 	 * @author  wangsz 2017-07-04
 	 */
-	public String getBeanName(String tableName) {
+	public String getRemovePrefixBeanName(String tableName) {
 		//去除表名前缀
 		String beanName = tableName.replace(Table.PREFIX, "");
 		beanName = StringUtils.underLineToCamel(StringUtils.toUpperCaseFirst(beanName));
@@ -236,11 +254,34 @@ public class TableDataProcessor {
 		
 		return beanName;
 	}
-	
+
+	/**
+	 * 将表名转换为实体名称
+	 * @param tableName
+	 * @return
+	 * @author  wangsz 2017-07-04
+	 */
+	public String getRemoveSuffixBeanName(String tableName) {
+		//去除表名后缀
+		String beanName = tableName.replace(Table.SUFFIX, "");
+		beanName = StringUtils.underLineToCamel(StringUtils.toUpperCaseFirst(beanName));
+
+		//如果在配置中读到指定的beanName，则采取配置
+		CustomTable table = tablesMap.get(tableName);
+		if(table != null && table.getTableName().equals(tableName)){
+			String domainObjName = table.getDomainObjectName();
+			if(domainObjName != null && !domainObjName.equals(""))
+				beanName = domainObjName;
+		}
+
+		return beanName;
+	}
+
+
 	/**
 	 * 处理列名，默认采取配置文件中的内容；若配置文件没有配置则采用驼峰命名法
 	 * @param columns
-	 * @param needPrefix 是否需要前缀
+	 * @param tableName
 	 * @author  wangsz 2017-07-04
 	 */
 	public void prepareProcessColumns(String tableName, List<Column> columns) {

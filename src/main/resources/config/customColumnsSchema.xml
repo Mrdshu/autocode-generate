@@ -15,7 +15,7 @@
 	<excludeColumns>id,extend1,extend2,extend3</excludeColumns>
 	
 	<!--列名映射时是否需要前缀，例如tb_name，为false时映射成实体类成员变量为name-->
-	<needPrefix>false</needPrefix>
+	<needPrefix>true</needPrefix>
 	
 	<!--特殊列名，needPrefix为false时，保持前缀列名集合-->
 	<specialColumns>start_time,end_time</specialColumns>

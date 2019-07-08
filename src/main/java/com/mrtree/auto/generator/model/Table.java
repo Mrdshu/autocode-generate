@@ -15,12 +15,18 @@ public class Table {
 	
 	/**表名前缀，生成实体类名时会过滤掉*/
 	public static final String PREFIX = "tb_";
+
+	/**表名前缀，生成实体类名时会过滤掉*/
+	public static final String SUFFIX = "_tab";
 	
 	/**表名*/
 	private String tableName;
 
 	/**表名对应的实体名*/
 	private String beanName;
+
+	/**表名对应的实体名*/
+	private String lowBeanName;
 
 	/**表的描述*/
 	private String remark;
